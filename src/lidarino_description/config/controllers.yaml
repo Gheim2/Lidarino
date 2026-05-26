@@ -1,0 +1,14 @@
+controller_manager:
+  ros__parameters:
+    update_rate: 1000  # Frequenza del loop di controllo (100 Hz)
+
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+
+    lidar_velocity_controller:
+      type: velocity_controllers/JointGroupVelocityController
+
+lidar_velocity_controller:
+  ros__parameters:
+    joints:
+      - lidar_Revolute
