@@ -8,6 +8,9 @@ controller_manager:
     lidar_velocity_controller:
       type: velocity_controllers/JointGroupVelocityController
 
+    diff_drive_controller:
+      type: diff_drive_controller/DiffDriveController
+
 joint_state_broadcaster:
   ros__parameters:
     publish_rate: 100
@@ -16,3 +19,16 @@ lidar_velocity_controller:
   ros__parameters:
     joints:
       - lidar_Revolute
+
+diff_drive_controller:
+  ros__parameters:
+    left_wheel_names: ["L_wheel_Revolute"]
+    right_wheel_names: ["R_wheel_Revolute"]
+    wheel_separation: 0.128  # Distanza tra le ruote (in metri)
+    wheel_radius: 0.035     # Raggio delle ruote (in metri)
+    publish_rate: 50.0
+    
+    # Frame per l'odometria
+    base_frame_id: base_link
+    odom_frame_id: odom
+    enable_odom_tf: true

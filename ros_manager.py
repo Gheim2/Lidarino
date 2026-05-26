@@ -38,6 +38,7 @@ def main():
         print("3. 🌍 Avvia Gazebo (Controller Lidarino)")
         print("4. 👁️  Avvia Rviz2 (Vuoto)")
         print("5. 🚀 Avvia Lidarino in Rviz (Launch File Completo)")
+        print("6. 🎮 Controlla Lidarino con Tastiera (Teleop Twist Keyboard)")
         print("0. ❌ Esci")
         
         scelta = input("\nSeleziona un'opzione: ")
@@ -49,7 +50,6 @@ def main():
             
         elif scelta == '2':
             run_command("colcon build --symlink-install")
-            run_command("source install/setup.bash", needs_sourcing=False) 
             
         elif scelta == '3':
             print("\n[Avvio] Lancio Gazebo e il controller del Lidarino...")
@@ -60,9 +60,12 @@ def main():
 
         elif scelta == '5':
             print("\n[Avvio] Lancio l'ecosistema di Lidarino (Rviz + TF)...")
-            # Un solo comando elegante per far partire tutto!
             run_command("ros2 launch lidarino_description display.launch.py", needs_sourcing=True)
-            
+
+        elif scelta == '6':
+            print("\n[Avvio] Lancio il controller tramite tastiera...")
+            run_command("ros2 run teleop_twist_keyboard teleop_twist_keyboard --ros-args -p stamped:=true -p frame_id:=base_link -r cmd_vel:=/diff_drive_controller/cmd_vel", needs_sourcing=True)
+
         elif scelta == '0':
             print("Uscita dal manager.")
             sys.exit(0)

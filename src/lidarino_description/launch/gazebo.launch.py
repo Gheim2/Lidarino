@@ -75,6 +75,12 @@ def generate_launch_description():
         parameters=[{'use_sim_time': True}]
     )
 
+    diff_drive_spawner = Node(
+        package="controller_manager",
+        executable="spawner",
+        arguments=["diff_drive_controller", "--controller-manager", "/controller_manager"],
+    )
+
     return LaunchDescription([
         set_env,
         rsp_node,
@@ -85,7 +91,7 @@ def generate_launch_description():
         RegisterEventHandler(
             event_handler=OnProcessExit(
                 target_action=spawn_entity,
-                on_exit=[joint_state_broadcaster, velocity_controller],
+                on_exit=[joint_state_broadcaster, velocity_controller, diff_drive_spawner],
             )
         ),
     ])
