@@ -22,7 +22,7 @@ class TofMerger(Node):
         self.create_subscription(JointState, '/joint_states', self.joint_cb, 10)
         self.current_lidar_angle = 0.0
         # Dizionario per memorizzare le ultime letture
-        self.scan_buffer = [float('inf')] * 360
+        self.scan_buffer = [0.0] * 360
         # Timer a 10Hz per pubblicare il pacchetto fuso
         self.timer = self.create_timer(0.1, self.publish_merged_scan)
 
@@ -66,6 +66,7 @@ class TofMerger(Node):
         # Invio della mappa
         msg.ranges = list(self.scan_buffer)
         self.publisher_.publish(msg)
+        self.scan_buffer = [0.0] * 360
         
 def main(args=None):
     rclpy.init(args=args)

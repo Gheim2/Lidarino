@@ -22,12 +22,16 @@ colcon build
 source install/setup.bash
 ```
 
-## Run (Gazebo)
+## Run
 
-Example to launch Gazebo with the robot:
+You can use ros_manager.py to run Gazebo and RVIZ or you can use the following commands:
 
 ```bash
 ros2 launch lidarino_description gazebo.launch.py
+```
+
+```bash
+rviz2 --ros-args -p use_sim_time:=true
 ```
 
 ## Contributing

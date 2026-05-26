@@ -1,0 +1,35 @@
+slam_toolbox:
+  ros__parameters:
+    use_sim_time: true
+    # Impostazioni di base
+    solver_plugin: solver_plugins::CeresSolver
+    ceres_linear_solver: SPARSE_NORMAL_CHOLESKY
+    ceres_preconditioner: SCHUR_JACOBI
+    ceres_trust_region_strategy: LEVENBERG_MARQUARDT
+    ceres_dogleg_type: TRADITIONAL_DOGLEG
+    ceres_loss_function: None # None = squared loss
+
+    # Nomi dei frame e dei topic
+    odom_frame: odom
+    map_frame: map
+    base_frame: base_link
+    scan_topic: /scan
+    use_map_saver: true
+    mode: mapping
+
+    # Parametri temporali e di aggiornamento
+    # Dato che Lidarino pubblica a 10Hz, non possiamo essere troppo stringenti
+    transform_timeout: 0.5
+    tf_buffer_duration: 5.0
+    
+    # Risoluzione della mappa (0.05 = 5 cm per pixel)
+    resolution: 0.05
+    
+    # Parametri di correlazione (Tuning per LiDAR a bassa risoluzione)
+    max_laser_range: 2.0       # Range massimo dei nostri VL53L0X
+    minimum_time_interval: 0.05 # Aggiorna ogni volta che arriva un pacchetto a 10Hz
+    transform_publish_period: 0.05 # Pubblica la TF map->odom a 20Hz
+    
+    # Distanze minime di movimento prima di ricalcolare
+    minimum_travel_distance: 0.1
+    minimum_travel_heading: 0.1

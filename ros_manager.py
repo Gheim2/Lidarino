@@ -33,13 +33,14 @@ def run_command(command, needs_sourcing=False):
 def main():
     while True:
         print("=== Lidarino ROS 2 Manager ===")
-        print("1. 🛠️  Compila Xacro in URDF (Solo per test manuali)")
-        print("2. 🏗️  Colcon Build (compila tutto il workspace)")
-        print("3. 🌍 Avvia Gazebo (Controller Lidarino)")
-        print("4. 👁️  Avvia Rviz2 (Vuoto)")
-        print("5. 🚀 Avvia Lidarino in Rviz (Launch File Completo)")
-        print("6. 🎮 Controlla Lidarino con Tastiera (Teleop Twist Keyboard)")
-        print("0. ❌ Esci")
+        print("1. 🛠️\tCompila Xacro in URDF (Solo per test manuali)")
+        print("2. 🏗️\tColcon Build (compila tutto il workspace)")
+        print("3. 🌍\tAvvia Gazebo (Controller Lidarino)")
+        print("4. 👁️\tAvvia Rviz2")
+        print("5. 🚀\tAttiva il Lidar")
+        print("6. 🎮\tControlla Lidarino con Tastiera (Teleop Twist Keyboard)")
+        print("7. 🧭\tAttiva SLAM")
+        print("0. ❌\tEsci")
         
         scelta = input("\nSeleziona un'opzione: ")
 
@@ -59,12 +60,16 @@ def main():
             run_command("rviz2 --ros-args -p use_sim_time:=true", needs_sourcing=True)
 
         elif scelta == '5':
-            print("\n[Avvio] Lancio l'ecosistema di Lidarino (Rviz + TF)...")
-            run_command("ros2 launch lidarino_description display.launch.py", needs_sourcing=True)
+            vel = input("\n Seleziona velocità di rotazione Lidar [default: 9.4 rad/s (1.5 Hz)]: ") or "9.4"
+            run_command(f"ros2 topic pub /lidar_velocity_controller/commands std_msgs/msg/Float64MultiArray \"{{data: [{vel}]}}\"", needs_sourcing=True)
 
         elif scelta == '6':
             print("\n[Avvio] Lancio il controller tramite tastiera...")
             run_command("ros2 run teleop_twist_keyboard teleop_twist_keyboard --ros-args -p stamped:=true -p frame_id:=base_link -r cmd_vel:=/diff_drive_controller/cmd_vel", needs_sourcing=True)
+
+        elif scelta == '7':
+            print("\n[Avvio] Lancio SLAM...")
+            run_command("ros2 launch slam_toolbox online_async_launch.py slam_params_file:=./src/lidarino_description/config/mapper_params_online_async.yaml use_sim_time:=true", needs_sourcing=True)
 
         elif scelta == '0':
             print("Uscita dal manager.")
