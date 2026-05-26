@@ -14,9 +14,10 @@
             </geometry>
         </visual>
         <collision name="wheel_R_collision">
-            <origin xyz="1.1368683772161603e-15 1.3322676295501878e-17 0.0" rpy="-4.72621546065603e-16 -1.1102230246251568e-16 -2.7755575615628926e-17" />
+            <origin xyz="0 0 -0.017" rpy="0 0 0" />
             <geometry>
-                <mesh filename="${mesh_url}wheel_R.stl" scale="0.001 0.001 0.001" />
+                <cylinder radius="0.035" length="0.025" />
+                <!-- <mesh filename="${mesh_url}wheel_R.stl" scale="0.001 0.001 0.001" /> -->
             </geometry>
         </collision>
     </link>
@@ -52,9 +53,10 @@
             </geometry>
         </visual>
         <collision name="wheel_L_collision">
-            <origin xyz="1.1368683772161603e-15 1.1102230246251566e-17 0.0" rpy="-1.4649353258190343e-16 -1.2470396389907355e-32 -5.551115123125783e-17" />
+            <origin xyz="0 0 -0.017" rpy="0 0 0" />
             <geometry>
-                <mesh filename="${mesh_url}wheel_L.stl" scale="0.001 0.001 0.001" />
+                <cylinder radius="0.035" length="0.025" />
+                <!-- <mesh filename="${mesh_url}wheel_L.stl" scale="0.001 0.001 0.001" /> -->
             </geometry>
         </collision>
     </link>
@@ -171,5 +173,19 @@
         <plugin filename="gz_ros2_control-system" name="gz_ros2_control::GazeboSimROS2ControlPlugin">
             <parameters>$(find lidarino_description)/config/controllers.yaml</parameters>
         </plugin>
+    </gazebo>
+
+    <gazebo reference="wheel_R">
+        <mu1>1.0</mu1> 
+        <mu2>1.0</mu2> 
+        <kp>1000000.0</kp> 
+        <kd>100.0</kd> 
+    </gazebo>
+
+    <gazebo reference="wheel_L">
+        <mu1>1.0</mu1>
+        <mu2>1.0</mu2>
+        <kp>1000000.0</kp>
+        <kd>100.0</kd>
     </gazebo>
 </robot>

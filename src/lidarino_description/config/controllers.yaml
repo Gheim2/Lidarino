@@ -8,6 +8,10 @@ controller_manager:
     lidar_velocity_controller:
       type: velocity_controllers/JointGroupVelocityController
 
+joint_state_broadcaster:
+  ros__parameters:
+    publish_rate: 100
+
 lidar_velocity_controller:
   ros__parameters:
     joints:

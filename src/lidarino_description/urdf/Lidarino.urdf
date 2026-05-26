@@ -17,9 +17,10 @@
       </geometry>
     </visual>
     <collision name="wheel_R_collision">
-      <origin rpy="-4.72621546065603e-16 -1.1102230246251568e-16 -2.7755575615628926e-17" xyz="1.1368683772161603e-15 1.3322676295501878e-17 0.0"/>
+      <origin rpy="0 0 0" xyz="0 0 -0.017"/>
       <geometry>
-        <mesh filename="package://lidarino_description/urdf/meshes/wheel_R.stl" scale="0.001 0.001 0.001"/>
+        <cylinder length="0.025" radius="0.035"/>
+        <!-- <mesh filename="${mesh_url}wheel_R.stl" scale="0.001 0.001 0.001" /> -->
       </geometry>
     </collision>
   </link>
@@ -55,9 +56,10 @@
       </geometry>
     </visual>
     <collision name="wheel_L_collision">
-      <origin rpy="-1.4649353258190343e-16 -1.2470396389907355e-32 -5.551115123125783e-17" xyz="1.1368683772161603e-15 1.1102230246251566e-17 0.0"/>
+      <origin rpy="0 0 0" xyz="0 0 -0.017"/>
       <geometry>
-        <mesh filename="package://lidarino_description/urdf/meshes/wheel_L.stl" scale="0.001 0.001 0.001"/>
+        <cylinder length="0.025" radius="0.035"/>
+        <!-- <mesh filename="${mesh_url}wheel_L.stl" scale="0.001 0.001 0.001" /> -->
       </geometry>
     </collision>
   </link>
@@ -111,7 +113,7 @@
   <joint name="tof_1_joint" type="fixed">
     <parent link="lidar"/>
     <child link="tof_1_link"/>
-    <origin rpy="0 0 0" xyz="0.043 0.0 -0.031"/>
+    <origin rpy="0 0 0" xyz="0.044 0.0 -0.031"/>
   </joint>
   <gazebo reference="tof_1_link">
     <sensor name="tof_1_sensor" type="gpu_lidar">
@@ -151,7 +153,7 @@
   <joint name="tof_2_joint" type="fixed">
     <parent link="lidar"/>
     <child link="tof_2_link"/>
-    <origin rpy="0 0 1.5707963267948966" xyz="2.6329906181668093e-18 0.043 -0.031"/>
+    <origin rpy="0 0 1.5707963267948966" xyz="2.694222958124177e-18 0.044 -0.031"/>
   </joint>
   <gazebo reference="tof_2_link">
     <sensor name="tof_2_sensor" type="gpu_lidar">
@@ -191,7 +193,7 @@
   <joint name="tof_3_joint" type="fixed">
     <parent link="lidar"/>
     <child link="tof_3_link"/>
-    <origin rpy="0 0 3.141592653589793" xyz="-0.043 5.265981236333619e-18 -0.031"/>
+    <origin rpy="0 0 3.141592653589793" xyz="-0.044 5.388445916248354e-18 -0.031"/>
   </joint>
   <gazebo reference="tof_3_link">
     <sensor name="tof_3_sensor" type="gpu_lidar">
@@ -231,7 +233,7 @@
   <joint name="tof_4_joint" type="fixed">
     <parent link="lidar"/>
     <child link="tof_4_link"/>
-    <origin rpy="0 0 4.71238898038469" xyz="-7.898971854500428e-18 -0.043 -0.031"/>
+    <origin rpy="0 0 4.71238898038469" xyz="-8.08266887437253e-18 -0.044 -0.031"/>
   </joint>
   <gazebo reference="tof_4_link">
     <sensor name="tof_4_sensor" type="gpu_lidar">
@@ -279,7 +281,19 @@
   </ros2_control>
   <gazebo>
     <plugin filename="gz_ros2_control-system" name="gz_ros2_control::GazeboSimROS2ControlPlugin">
-      <parameters>/home/peppe/mobilino_ws/install/lidarino_description/share/lidarino_description/config/controllers.yaml</parameters>
+      <parameters>/home/peppe/lidarino_ws/install/lidarino_description/share/lidarino_description/config/controllers.yaml</parameters>
     </plugin>
+  </gazebo>
+  <gazebo reference="wheel_R">
+    <mu1>1.0</mu1>
+    <mu2>1.0</mu2>
+    <kp>1000000.0</kp>
+    <kd>100.0</kd>
+  </gazebo>
+  <gazebo reference="wheel_L">
+    <mu1>1.0</mu1>
+    <mu2>1.0</mu2>
+    <kp>1000000.0</kp>
+    <kd>100.0</kd>
   </gazebo>
 </robot>

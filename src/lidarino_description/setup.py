@@ -19,6 +19,8 @@ setup(
         (os.path.join('share', package_name, 'launch'), glob('launch/*.launch.py')),
         # Copia i file di configurazione
         (os.path.join('share', package_name, 'config'), glob('config/*.yaml')),
+        # Copia i file del mondo
+        (os.path.join('share', package_name, 'worlds'), glob('worlds/*')),
     ],
     install_requires=['setuptools'],
     zip_safe=True,

@@ -49,6 +49,7 @@ def main():
             
         elif scelta == '2':
             run_command("colcon build --symlink-install")
+            run_command("source install/setup.bash", needs_sourcing=False) 
             
         elif scelta == '3':
             print("\n[Avvio] Lancio Gazebo e il controller del Lidarino...")

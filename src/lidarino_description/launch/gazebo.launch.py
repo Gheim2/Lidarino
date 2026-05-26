@@ -13,6 +13,7 @@ def generate_launch_description():
     
     gazebo_models_path = os.path.join(pkg_share, '..')
     set_env = AppendEnvironmentVariable('GZ_SIM_RESOURCE_PATH', gazebo_models_path)
+    world_file = os.path.join(pkg_share, 'worlds', 'lidarino.world')
 
     xacro_file = os.path.join(pkg_share, 'urdf', 'Lidarino.urdf.xacro')
     robot_desc = xacro.process_file(xacro_file).toxml()
@@ -20,13 +21,17 @@ def generate_launch_description():
     rsp_node = Node(
         package='robot_state_publisher',
         executable='robot_state_publisher',
-        parameters=[{'robot_description': robot_desc, 'use_sim_time': True}]
+        parameters=[{
+            'robot_description': robot_desc,
+            'use_sim_time': True,
+            'publish_frequency': 100.0
+        }]
     )
 
     gazebo = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([os.path.join(
             get_package_share_directory('ros_gz_sim'), 'launch', 'gz_sim.launch.py')]),
-        launch_arguments={'gz_args': '-r empty.sdf'}.items()
+        launch_arguments={'gz_args': f'-r {world_file}'}.items()
     )
 
     spawn_entity = Node(
@@ -42,10 +47,10 @@ def generate_launch_description():
         executable='parameter_bridge',
         arguments=[
             '/clock@rosgraph_msgs/msg/Clock[gz.msgs.Clock',
-            '/scan_tof_1@sensor_msgs/msg/LaserScan@gz.msgs.LaserScan',
-            '/scan_tof_2@sensor_msgs/msg/LaserScan@gz.msgs.LaserScan',
-            '/scan_tof_3@sensor_msgs/msg/LaserScan@gz.msgs.LaserScan',
-            '/scan_tof_4@sensor_msgs/msg/LaserScan@gz.msgs.LaserScan',
+            '/scan_tof_1@sensor_msgs/msg/LaserScan[gz.msgs.LaserScan',
+            '/scan_tof_2@sensor_msgs/msg/LaserScan[gz.msgs.LaserScan',
+            '/scan_tof_3@sensor_msgs/msg/LaserScan[gz.msgs.LaserScan',
+            '/scan_tof_4@sensor_msgs/msg/LaserScan[gz.msgs.LaserScan',
         ],
         output='screen'
     )
