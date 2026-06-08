@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="Lidarino">
+
+    <xacro:property name="mesh_url" value="package://lidarino_description/urdf/meshes/" />
+
+    <xacro:include filename="materials.xacro" />
+    
+    <xacro:include filename="lidarino_core.xacro" />
+
+    <xacro:include filename="tof_sensor.xacro" />
+
+    <xacro:include filename="lidarino_gazebo.xacro" />
+    <xacro:include filename="lidarino_ros2_control.xacro" />
+    <xacro:include filename="astra_camera.xacro" />
+
+    <xacro:tof_sensor id="1" angle="0"          parent="lidar" />
+    <xacro:tof_sensor id="2" angle="${pi/2}"    parent="lidar" />
+    <xacro:tof_sensor id="3" angle="${pi}"      parent="lidar" />
+    <xacro:tof_sensor id="4" angle="${3*pi/2}"  parent="lidar" />
+
+    <xacro:astra_camera parent="base_link" xyz="0.05 0.0 0.05" rpy="0 0 0" />
+
+</robot>

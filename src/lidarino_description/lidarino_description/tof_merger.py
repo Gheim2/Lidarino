@@ -24,7 +24,7 @@ class TofMerger(Node):
         # Dizionario per memorizzare le ultime letture
         self.scan_buffer = [0.0] * 360
         # Timer a 10Hz per pubblicare il pacchetto fuso
-        self.timer = self.create_timer(0.1, self.publish_merged_scan)
+        self.timer = self.create_timer(0.166, self.publish_merged_scan)
 
     def joint_cb(self, msg):
         try:

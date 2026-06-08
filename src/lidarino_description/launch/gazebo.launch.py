@@ -15,7 +15,7 @@ def generate_launch_description():
     set_env = AppendEnvironmentVariable('GZ_SIM_RESOURCE_PATH', gazebo_models_path)
     world_file = os.path.join(pkg_share, 'worlds', 'lidarino.world')
 
-    xacro_file = os.path.join(pkg_share, 'urdf', 'Lidarino.urdf.xacro')
+    xacro_file = os.path.join(pkg_share, 'urdf', 'lidarino.urdf.xacro')
     robot_desc = xacro.process_file(xacro_file).toxml()
 
     rsp_node = Node(
@@ -37,7 +37,12 @@ def generate_launch_description():
     spawn_entity = Node(
         package='ros_gz_sim',
         executable='create',
-        arguments=['-topic', 'robot_description', '-name', 'lidarino'],
+        arguments=[
+            '-string', robot_desc, 
+            '-name', 'lidarino'
+            '-allow_renaming', 'true',
+            '-z', '0.05'
+            ],
         output='screen'
     )
 
@@ -81,6 +86,27 @@ def generate_launch_description():
         arguments=["diff_drive_controller", "--controller-manager", "/controller_manager"],
     )
 
+    spawn_jsb_event = RegisterEventHandler(
+        event_handler=OnProcessExit(
+            target_action=spawn_entity,
+            on_exit=[joint_state_broadcaster],
+        )
+    )
+
+    spawn_vel_controller_event = RegisterEventHandler(
+        event_handler=OnProcessExit(
+            target_action=joint_state_broadcaster,
+            on_exit=[velocity_controller],
+        )
+    )
+
+    spawn_diff_drive_event = RegisterEventHandler(
+        event_handler=OnProcessExit(
+            target_action=velocity_controller,
+            on_exit=[diff_drive_spawner],
+        )
+    )
+
     return LaunchDescription([
         set_env,
         rsp_node,
@@ -88,10 +114,7 @@ def generate_launch_description():
         spawn_entity,
         bridge_node,
         tof_merger_node,
-        RegisterEventHandler(
-            event_handler=OnProcessExit(
-                target_action=spawn_entity,
-                on_exit=[joint_state_broadcaster, velocity_controller, diff_drive_spawner],
-            )
-        ),
+        spawn_jsb_event,
+        spawn_vel_controller_event,
+        spawn_diff_drive_event
     ])

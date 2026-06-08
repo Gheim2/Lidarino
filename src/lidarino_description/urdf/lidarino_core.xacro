@@ -1,0 +1,110 @@
+<?xml version='1.0' encoding='utf-8'?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="Lidarino">
+    
+    <link name="base_link">
+        <inertial>
+            <origin xyz="-0.003112056333080186 -2.296575824702822e-16 0.00763198155223819" rpy="0.0 0.0 0.0" />
+            <mass value="0.23452271908044364" />
+            <inertia ixx="0.00044352479067893535" iyy="0.0006700968102651768" izz="0.001064913287950513" ixy="8.940708824769937e-15" iyz="3.5156320803171255e-12" ixz="3.3751097963762396e-05" />
+        </inertial>
+        <visual name="base_link_visual">
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+            <geometry>
+                <mesh filename="${mesh_url}base_link.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+            <material name="steel_blue" />
+        </visual>
+        <collision name="base_link_collision">
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+            <geometry>
+                <mesh filename="${mesh_url}base_link.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+        </collision>
+    </link>
+    
+    <link name="wheel_R">
+        <inertial>
+            <origin xyz="3.8589283501977436e-08 3.3503422258718277e-13 -0.017044397508191807" rpy="0.0 -0.0 0.0" />
+            <mass value="0.0493089812577897" />
+            <inertia ixx="2.1725366580018456e-05" iyy="2.172573834724608e-05" izz="3.791921679166611e-05" ixy="5.925842498991085e-17" iyz="1.1233689759665433e-16" ixz="1.2860682814920879e-11" />
+        </inertial>
+        <visual name="wheel_R_visual">
+            <origin xyz="1.1368683772161603e-15 1.3322676295501878e-17 0.0" rpy="-4.72621546065603e-16 -1.1102230246251568e-16 -2.7755575615628926e-17" />
+            <geometry>
+                <mesh filename="${mesh_url}wheel_R.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+            <material name="dark_grey" />
+        </visual>
+        <collision name="wheel_R_collision">
+            <origin xyz="0 0 -0.017" rpy="0 0 0" />
+            <geometry>
+                <sphere radius="0.035" />
+            </geometry>
+        </collision>
+    </link>
+
+    <link name="wheel_L">
+        <inertial>
+            <origin xyz="3.8589283501977436e-08 3.3503422258718277e-13 -0.017044397508191828" rpy="0.0 -0.0 0.0" />
+            <mass value="0.0493089812577897" />
+            <inertia ixx="2.17253665800184e-05" iyy="2.1725738347246244e-05" izz="3.7919216791666135e-05" ixy="5.927197751706692e-17" iyz="1.1234367386023236e-16" ixz="1.2860682842025933e-11" />
+        </inertial>
+        <visual name="wheel_L_visual">
+            <origin xyz="1.1368683772161603e-15 1.1102230246251566e-17 0.0" rpy="-1.4649353258190343e-16 -1.2470396389907355e-32 -5.551115123125783e-17" />
+            <geometry>
+                <mesh filename="${mesh_url}wheel_L.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+            <material name="dark_grey" />
+        </visual>
+        <collision name="wheel_L_collision">
+            <origin xyz="0 0 -0.017" rpy="0 0 0" />
+            <geometry>
+                <sphere radius="0.035" />
+            </geometry>
+        </collision>
+    </link>
+
+    <link name="lidar">
+        <inertial>
+            <origin xyz="9.148285995408401e-10 -1.4055638260363446e-14 -0.018366241687653523" rpy="0.0 -0.0 0.0" />
+            <mass value="0.05517921789897613" />
+            <inertia ixx="4.035574913846524e-05" iyy="4.035574911324637e-05" izz="6.456345828808408e-05" ixy="6.10000891607277e-14" iyz="-7.147133370998126e-17" ixz="2.3863745181318397e-13" />
+        </inertial>
+        <visual name="lidar_visual">
+            <origin xyz="0.03699999999999997 -1.3132734841103373e-17 -0.005000000000000009" rpy="3.141592653589793 -1.1102230246251565e-16 -3.141592653589788" />
+            <geometry>
+                <mesh filename="${mesh_url}lidar.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+            <material name="matte_orange" />
+        </visual>
+        <collision name="lidar_collision">
+            <origin xyz="0.03699999999999997 -1.3132734841103373e-17 -0.005000000000000009" rpy="3.141592653589793 -1.1102230246251565e-16 -3.141592653589788" />
+            <geometry>
+                <mesh filename="${mesh_url}lidar.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+        </collision>
+    </link>
+
+    <joint name="L_wheel_Revolute" type="continuous">
+        <origin xyz="-0.06 0.06 0.015" rpy="1.5707963267948966 -0.0 0.0" />
+        <parent link="base_link" />
+        <child link="wheel_L" />
+        <axis xyz="0.0 0.0 -1.0" />
+        <limit effort="10.0" velocity="20.0" />
+    </joint>
+
+    <joint name="R_wheel_Revolute" type="continuous">
+        <origin xyz="-0.06 -0.06 0.015" rpy="-1.5707963267948966 -0.0 0.0" />
+        <parent link="base_link" />
+        <child link="wheel_R" />
+        <axis xyz="0.0 0.0 1.0" />
+        <limit effort="10.0" velocity="20.0" />
+    </joint>
+
+    <joint name="lidar_Revolute" type="continuous">
+        <origin xyz="-0.031000000000000003 0.0 0.03" rpy="3.141592653589793 -0.0 0.0" />
+        <parent link="base_link" />
+        <child link="lidar" />
+        <axis xyz="0.0 0.0 1.0" />
+    </joint>
+</robot>
