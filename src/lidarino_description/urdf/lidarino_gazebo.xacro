@@ -12,6 +12,11 @@
         <mu2>0.0</mu2>
     </gazebo>
 
+    <gazebo reference="caster">
+        <mu1>0.0</mu1>
+        <mu2>0.0</mu2>
+    </gazebo>
+
     <gazebo reference="wheel_R">
         <mu1>1.0</mu1> 
         <mu2>1.0</mu2> 

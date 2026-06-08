@@ -15,9 +15,30 @@
             <material name="steel_blue" />
         </visual>
         <collision name="base_link_collision">
+            <origin xyz="0.0 0.0 0.015" rpy="0.0 0.0 0.0" />
+            <geometry>
+                <box size="0.2 0.12 0.03" /> 
+            </geometry>
+        </collision>
+    </link>
+
+    <link name="caster">
+        <inertial>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+            <mass value="0.01" />
+            <inertia ixx="1e-6" iyy="1e-6" izz="1e-6" ixy="0" iyz="0" ixz="0" />
+        </inertial>
+        <visual name="caster_visual">
             <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
             <geometry>
-                <mesh filename="${mesh_url}base_link.stl" scale="0.001 0.001 0.001" />
+                <sphere radius="0.008" />
+            </geometry>
+            <material name="silver" />
+        </visual>
+        <collision name="caster_collision">
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+            <geometry>
+                <sphere radius="0.008" />
             </geometry>
         </collision>
     </link>
@@ -106,5 +127,11 @@
         <parent link="base_link" />
         <child link="lidar" />
         <axis xyz="0.0 0.0 1.0" />
+    </joint>
+
+    <joint name="caster_fixed" type="fixed">
+        <origin xyz="0.052 0.0 -0.013" rpy="0.0 0.0 0.0" />
+        <parent link="base_link" />
+        <child link="caster" />
     </joint>
 </robot>
