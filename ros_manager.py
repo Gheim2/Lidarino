@@ -34,11 +34,11 @@ def main():
     while True:
         print("=== Lidarino ROS 2 Manager ===")
         print("1. 🏗️\tColcon Build (compila tutto il workspace)")
-        print("2. 🌍\tAvvia Gazebo (Controller Lidarino)")
+        print("2. 🌍\tAvvia Gazebo (Controller, Slam, Nav)")
         print("3. 👁️\tAvvia Rviz2")
-        print("4. 🚀\tAttiva il Lidar")
+        print("4. 🖥️\tVisualizza Lidarino in Rviz2 [Solo display]")
+        # print("4. 🚀\tAttiva il Lidar")
         print("5. 🎮\tControlla Lidarino con Tastiera (Teleop Twist Keyboard)")
-        print("6. 🧭\tAttiva SLAM")
         print("0. ❌\tEsci")
         
         scelta = input("\nSeleziona un'opzione: ")
@@ -47,23 +47,23 @@ def main():
             run_command("colcon build --symlink-install")
             
         elif scelta == '2':
-            print("\n[Avvio] Lancio Gazebo e il controller del Lidarino...")
+            print("\n[Avvio] Lancio Gazebo...")
             run_command("ros2 launch lidarino_description gazebo.launch.py", needs_sourcing=True)
             
         elif scelta == '3':
             run_command("rviz2 --ros-args -p use_sim_time:=true", needs_sourcing=True)
 
         elif scelta == '4':
-            vel = input("\n Seleziona velocità di rotazione Lidar [default: 9.4 rad/s (1.5 Hz)]: ") or "9.4"
-            run_command(f"ros2 topic pub /lidar_velocity_controller/commands std_msgs/msg/Float64MultiArray \"{{data: [{vel}]}}\"", needs_sourcing=True)
+            run_command("ros2 launch lidarino_description display.launch.py", needs_sourcing=True)
+
+        # Only for Lidarino v1
+        # elif scelta == '4':
+        #     vel = input("\n Seleziona velocità di rotazione Lidar [default: 9.4 rad/s (1.5 Hz)]: ") or "9.4"
+        #     run_command(f"ros2 topic pub /lidar_velocity_controller/commands std_msgs/msg/Float64MultiArray \"{{data: [{vel}]}}\"", needs_sourcing=True)
 
         elif scelta == '5':
             print("\n[Avvio] Lancio il controller tramite tastiera...")
             run_command("ros2 run teleop_twist_keyboard teleop_twist_keyboard --ros-args -p stamped:=true -p frame_id:=base_link -r cmd_vel:=/diff_drive_controller/cmd_vel", needs_sourcing=True)
-
-        elif scelta == '6':
-            print("\n[Avvio] Lancio SLAM...")
-            run_command("ros2 launch slam_toolbox online_async_launch.py slam_params_file:=./src/lidarino_description/config/mapper_params_online_async.yaml use_sim_time:=true", needs_sourcing=True)
 
         elif scelta == '0':
             print("Uscita dal manager.")

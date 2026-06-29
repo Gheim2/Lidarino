@@ -4,22 +4,24 @@
     <xacro:macro name="astra_camera" params="parent xyz rpy">
 
         <link name="astra_link">
-            <visual>
+            <inertial>
+                <origin xyz="0.021745856967737336 3.8230579211581216e-05 0.029303333814809707" rpy="0.0 0.0 0.0" />
+                <mass value="0.23334756462839484" />
+                <inertia ixx="0.00045538823905664865" iyy="7.785663760045297e-05" izz="0.00045460807011731756" ixy="1.841447020567419e-07" iyz="-4.2054876695014596e-08" ixz="9.205395041665818e-06" />
+            </inertial>
+            <visual name="astracamera_visual">
+                <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
                 <geometry>
-                    <box size="0.04 0.165 0.03" />
+                    <mesh filename="${mesh_url}astracamera.stl" scale="0.001 0.001 0.001" />
                 </geometry>
-                <material name="dark_grey">
-                </material>
+                <material name="dark_grey" />
             </visual>
-            <collision>
+            <collision name="astracamera_collision">
+                <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
                 <geometry>
-                    <box size="0.04 0.165 0.03" />
+                    <mesh filename="${mesh_url}astracamera.stl" scale="0.001 0.001 0.001" />
                 </geometry>
             </collision>
-            <inertial>
-                <mass value="0.3" />
-                <inertia ixx="0.000703" iyy="0.000063" izz="0.000721" ixy="0" iyz="0" ixz="0" />
-            </inertial>
         </link>
 
         <joint name="astra_joint" type="fixed">
@@ -32,14 +34,14 @@
         <joint name="astra_optical_joint" type="fixed">
             <parent link="astra_link" />
             <child link="astra_optical_frame" />
-            <origin xyz="0 0 0" rpy="-1.57079632679 0 -1.57079632679" />
+            <origin xyz="0 0 0.032" rpy="${rpy}" />
         </joint>
 
-        <gazebo reference="astra_link">
+        <gazebo reference="astra_optical_frame">
             <sensor type="rgbd_camera" name="astra_pro">
                 <topic>/astra/camera</topic>
                 <always_on>true</always_on>
-                <update_rate>30.0</update_rate>
+                <update_rate>5.0</update_rate>
                 <camera>
                     <horizontal_fov>1.047</horizontal_fov> 
                     <image>

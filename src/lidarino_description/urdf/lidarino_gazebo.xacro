@@ -1,34 +1,36 @@
 <?xml version='1.0' encoding='utf-8'?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
-    <gazebo>
-        <plugin filename="gz_ros2_control-system" name="gz_ros2_control::GazeboSimROS2ControlPlugin">
-            <parameters>$(find lidarino_description)/config/controllers.yaml</parameters>
-        </plugin>
-    </gazebo>
+    <xacro:macro name="lidarino_gazebo" params="yaml_file">
+        <gazebo>
+            <plugin filename="gz_ros2_control-system" name="gz_ros2_control::GazeboSimROS2ControlPlugin">
+                <parameters>${yaml_file}</parameters>
+                <controller_manager_node_name>controller_manager</controller_manager_node_name>
+            </plugin>
+        </gazebo>
 
-    <gazebo reference="base_link">
-        <mu1>0.0</mu1>
-        <mu2>0.0</mu2>
-    </gazebo>
+        <gazebo reference="base_link">
+            <mu1>0.0</mu1>
+            <mu2>0.0</mu2>
+        </gazebo>
 
-    <gazebo reference="caster">
-        <mu1>0.0</mu1>
-        <mu2>0.0</mu2>
-    </gazebo>
+        <gazebo reference="caster">
+            <mu1>0.0</mu1>
+            <mu2>0.0</mu2>
+        </gazebo>
 
-    <gazebo reference="wheel_R">
-        <mu1>1.0</mu1> 
-        <mu2>1.0</mu2> 
-        <kp>1000000.0</kp> 
-        <kd>100.0</kd> 
-    </gazebo>
+        <gazebo reference="wheel_R">
+            <mu1>1.0</mu1> 
+            <mu2>1.0</mu2> 
+            <kp>1000000.0</kp> 
+            <kd>100.0</kd> 
+        </gazebo>
 
-    <gazebo reference="wheel_L">
-        <mu1>1.0</mu1>
-        <mu2>1.0</mu2>
-        <kp>1000000.0</kp>
-        <kd>100.0</kd>
-    </gazebo>
-
+        <gazebo reference="wheel_L">
+            <mu1>1.0</mu1>
+            <mu2>1.0</mu2>
+            <kp>1000000.0</kp>
+            <kd>100.0</kd>
+        </gazebo>
+    </xacro:macro>
 </robot>

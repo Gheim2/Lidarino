@@ -5,12 +5,16 @@
 
     <xacro:include filename="materials.xacro" />
     
-    <xacro:include filename="lidarino_core.xacro" />
+    <xacro:include filename="lidarino_core_v1.xacro" />
 
     <xacro:include filename="tof_sensor.xacro" />
 
+    <xacro:arg name="yaml_file" default="$(find lidarino_description)/config/controllers_v1.yaml" />
+
     <xacro:include filename="lidarino_gazebo.xacro" />
     <xacro:include filename="lidarino_ros2_control.xacro" />
+    <xacro:lidarino_gazebo yaml_file="$(arg yaml_file)" />
+    <xacro:lidarino_ros2_control use_lidar_control="true" />
     <xacro:include filename="astra_camera.xacro" />
 
     <xacro:tof_sensor id="1" angle="0"          parent="lidar" />

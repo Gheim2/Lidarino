@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="Lidarino">
+    <xacro:property name="use_lidar_control" value="false" />
+    <xacro:property name="mesh_url" value="package://lidarino_description/urdf/meshes/" />
+    <xacro:arg name="yaml_file" default="$(find lidarino_description)/config/controllers_s2.yaml" />
+    <xacro:include filename="materials.xacro" />
+    <xacro:include filename="lidarino_core_s2.xacro" /> 
+
+    <xacro:include filename="lidarino_gazebo.xacro" />
+    <xacro:include filename="lidarino_ros2_control.xacro" />
+    <xacro:lidarino_gazebo yaml_file="$(arg yaml_file)" />
+    <xacro:lidarino_ros2_control use_lidar_control="${use_lidar_control}" />
+    <xacro:include filename="astra_camera.xacro" />
+    <xacro:include filename="rplidars2.xacro" />
+
+    <xacro:astra_camera parent="base_link" xyz="0.098 0.0 0.013" rpy="0 0 3.141592653589793" />
+    <xacro:rplidars2 parent="base_link" xyz="-0.031 0.0 0.043" rpy="0 0 0" />
+</robot>

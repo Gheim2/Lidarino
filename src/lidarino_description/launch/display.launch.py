@@ -2,22 +2,31 @@ import os
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch_ros.actions import Node
-import xacro
+from launch.actions import DeclareLaunchArgument
+from launch.substitutions import LaunchConfiguration, Command, PathJoinSubstitution
+from launch_ros.substitutions import FindPackageShare
+from launch_ros.parameter_descriptions import ParameterValue
 
 def generate_launch_description():
-    # Nome del pacchetto
-    pkg_name = 'lidarino_description'
-    
-    # Trova la cartella 'share' del pacchetto installato
-    pkg_share = get_package_share_directory(pkg_name)
-    
-    # Percorso assoluto del file Xacro
-    xacro_file = os.path.join(pkg_share, 'urdf', 'Lidarino.urdf.xacro')
-    
-    # Compila il file Xacro in XML (URDF) dinamicamente
-    doc = xacro.process_file(xacro_file)
-    robot_desc = doc.toxml()
+    pkg_share = FindPackageShare('lidarino_description')
 
+    model_arg = DeclareLaunchArgument(
+        'model',
+        default_value='s2',
+        choices=['v1', 's2'],
+        description='Seleziona il modello del robot: v1, s2'
+    )
+    model = LaunchConfiguration('model')
+    xacro_file = PathJoinSubstitution([
+        pkg_share,
+        'urdf',
+        ['lidarino_', model, '.urdf.xacro']
+    ])
+
+    pkg_share_dir = get_package_share_directory('lidarino_description')
+    rviz_config_file = os.path.join(pkg_share_dir, 'config', 'justRobot.rviz')
+
+    robot_desc = ParameterValue(Command(['xacro ', xacro_file]), value_type=str)
     # Nodo 1: Robot State Publisher (Invia il modello URDF a tutto il sistema)
     rsp_node = Node(
         package='robot_state_publisher',
@@ -37,11 +46,13 @@ def generate_launch_description():
     rviz_node = Node(
         package='rviz2',
         executable='rviz2',
-        output='screen'
+        output='screen',
+        arguments=['-d', rviz_config_file]
     )
 
     # Ritorna e avvia tutti i nodi contemporaneamente
     return LaunchDescription([
+        model_arg,
         rsp_node,
         jsp_gui_node,
         rviz_node
