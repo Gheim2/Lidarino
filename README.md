@@ -25,7 +25,7 @@ git clone https://github.com/Gheim2/Lidarino.git lidarino_ws
 cd lidarino_ws
 ```
 
-# 2. Import third-party dependencies (sllidar, m-explore)
+### 2. Import third-party dependencies (sllidar, m-explore)
 ```bash
 vcs import src < lidarino.repos
 ```
