@@ -12,7 +12,10 @@
     <xacro:lidarino_ros2_control use_lidar_control="${use_lidar_control}" />
     <xacro:include filename="astra_camera.xacro" />
     <xacro:include filename="rplidars2.xacro" />
+    <xacro:include filename="imu.xacro" />
+
 
     <xacro:astra_camera parent="base_link" xyz="0.098 0.0 0.013" rpy="0 0 3.141592653589793" />
     <xacro:rplidars2 parent="base_link" xyz="-0.031 0.0 0.043" rpy="0 0 0" />
+    <xacro:imu_sensor parent="base_link" xyz="0.03 0.0 0.004" rpy="0 0 0" />
 </robot>

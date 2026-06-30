@@ -352,6 +352,25 @@
       </link>
     </model>
 
+    <!-- Ostacolo basso: invisibile al lidar (h=3cm), visibile alla camera (h=8cm) -->
+    <!-- Posizionato nel corridoio, percorso naturale del robot -->
+    <model name="low_obstacle">
+      <static>true</static>
+      <pose>-3.0 3.0 0.03 0 0 0</pose>
+      <link name="link">
+        <collision name="col">
+          <geometry><box><size>0.4 0.4 0.06</size></box></geometry>
+        </collision>
+        <visual name="vis">
+          <geometry><box><size>0.4 0.4 0.06</size></box></geometry>
+          <material>
+            <ambient>0.8 0.2 0.2 1</ambient>
+            <diffuse>0.8 0.2 0.2 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
     <!-- Mobile TV (appoggiato alla parete salotto/corridoio) -->
     <model name="tv_stand">
       <static>true</static>

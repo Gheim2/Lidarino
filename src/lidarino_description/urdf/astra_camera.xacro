@@ -17,9 +17,10 @@
                 <material name="dark_grey" />
             </visual>
             <collision name="astracamera_collision">
-                <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+                <origin xyz="0.02 0.0 0.035" rpy="0.0 0.0 0.0" />
                 <geometry>
-                    <mesh filename="${mesh_url}astracamera.stl" scale="0.001 0.001 0.001" />
+                    <box size="0.04 0.15 0.03" />
+                    <!-- <mesh filename="${mesh_url}astracamera.stl" scale="0.001 0.001 0.001" /> -->
                 </geometry>
             </collision>
         </link>

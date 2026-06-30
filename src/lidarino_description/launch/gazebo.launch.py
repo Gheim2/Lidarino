@@ -2,12 +2,13 @@ import os
 from pyexpat import model
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
-from launch.actions import IncludeLaunchDescription, RegisterEventHandler, AppendEnvironmentVariable, DeclareLaunchArgument, TimerAction
+from launch.actions import IncludeLaunchDescription, RegisterEventHandler, AppendEnvironmentVariable, DeclareLaunchArgument, TimerAction, EmitEvent
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration, Command, PathJoinSubstitution, PythonExpression
 from launch_ros.actions import Node
 from launch.conditions import IfCondition
 from launch.event_handlers import OnProcessExit
+from launch.events import Shutdown
 from launch_ros.substitutions import FindPackageShare
 from launch_ros.parameter_descriptions import ParameterValue
 
@@ -21,7 +22,7 @@ def generate_launch_description():
 
     world_arg = DeclareLaunchArgument(
         'world',
-        default_value='lidarino.world',
+        default_value='apartment.world',
         description='Seleziona il file del mondo Gazebo da caricare: lidarino.world, apartment.world'
     )
 
@@ -69,8 +70,11 @@ def generate_launch_description():
             '-string', robot_xacro_cmd, 
             '-name', 'lidarino',
             '-allow_renaming', 'true',
-            '-z', '0.05'
-            ],
+            '-x', '-1.0',
+            '-y', '3.5', 
+            '-z', '0.05',
+            '-Y', '3.14',    # ← Faccia verso sud
+        ],
         output='screen'
     )
 
@@ -166,6 +170,29 @@ def generate_launch_description():
         ])
     )
 
+    bridge_imu = Node(
+        package='ros_gz_bridge',
+        executable='parameter_bridge',
+        arguments=[
+            '/imu@sensor_msgs/msg/Imu[gz.msgs.IMU'
+        ],
+        output='screen'
+    )
+
+    ekf_node = Node(
+        package='robot_localization',
+        executable='ekf_node',
+        name='ekf_filter_node',
+        output='screen',
+        parameters=[
+            PathJoinSubstitution([FindPackageShare('lidarino_description'), 'config', 'ekf.yaml']),
+            {'use_sim_time': True}
+        ],
+        remappings=[
+            ('odometry/filtered', 'odometry/filtered')  # lascia com'è, o personalizza
+        ]
+    )
+
     return LaunchDescription([
         model_arg,
         world_arg,
@@ -180,4 +207,6 @@ def generate_launch_description():
         delayed_spawners,
         slam_launch,
         navigation_launch,
+        bridge_imu,
+        ekf_node,
     ])

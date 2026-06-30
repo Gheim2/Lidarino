@@ -1,0 +1,20 @@
+explore_node:
+  ros__parameters:
+    use_sim_time: true
+    # Frame e Topic (Fondamentali per allinearsi a Nav2 e SLAM)
+    robot_base_frame: "base_link"
+    costmap_topic: "/global_costmap/costmap"
+    costmap_updates_topic: "/global_costmap/costmap_updates"
+    
+    # Comportamento
+    visualize: true             # Pubblica i marker delle frontiere su RViz
+    planner_frequency: 1.0      # Con che frequenza calcola nuove frontiere (1 Hz è un buon equilibrio)
+    progress_timeout: 30.0      # Se il robot si incastra per 30 secondi cercando di raggiungere una frontiera, ci rinuncia e passa alla successiva
+    
+    # Pesi per la scelta delle frontiere (Tuning)
+    potential_scale: 3.0        # Quanto peso dare alla vicinanza (più è alto, più preferisce frontiere vicine)
+    orientation_scale: 0.0      # Ignora l'orientamento finale
+    gain_scale: 1.0             # Quanto peso dare alla grandezza della frontiera (più è alto, più preferisce frontiere grandi)
+    
+    transform_tolerance: 0.3    # Tolleranza per i ritardi delle TF
+    min_frontier_size: 0.5      # Ignora le frontiere più piccole di 50 cm (evita che cerchi di infilarsi in fessure inesistenti)

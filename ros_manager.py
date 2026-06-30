@@ -39,8 +39,10 @@ def main():
         print("4. 🖥️\tVisualizza Lidarino in Rviz2 [Solo display]")
         # print("4. 🚀\tAttiva il Lidar")
         print("5. 🎮\tControlla Lidarino con Tastiera (Teleop Twist Keyboard)")
+        print("6. 🤖\tAvvia Esplorazione Autonoma (Explore Lite)")
         print("0. ❌\tEsci")
         
+
         scelta = input("\nSeleziona un'opzione: ")
 
         if scelta == '1':
@@ -48,7 +50,8 @@ def main():
             
         elif scelta == '2':
             print("\n[Avvio] Lancio Gazebo...")
-            run_command("ros2 launch lidarino_description gazebo.launch.py", needs_sourcing=True)
+            # run_command("ros2 launch lidarino_description gazebo.launch.py", needs_sourcing=True)
+            run_command("./launch_sim.sh", needs_sourcing=False) 
             
         elif scelta == '3':
             run_command("rviz2 --ros-args -p use_sim_time:=true", needs_sourcing=True)
@@ -64,6 +67,11 @@ def main():
         elif scelta == '5':
             print("\n[Avvio] Lancio il controller tramite tastiera...")
             run_command("ros2 run teleop_twist_keyboard teleop_twist_keyboard --ros-args -p stamped:=true -p frame_id:=base_link -r cmd_vel:=/diff_drive_controller/cmd_vel", needs_sourcing=True)
+
+        elif scelta == '6':
+            print("\n[Avvio] L'esplorazione autonoma...")
+            run_command("ros2 run explore_lite explore --ros-args --params-file /home/peppe/lidarino_ws/src/lidarino_description/config/explore.yaml", needs_sourcing=True)
+
 
         elif scelta == '0':
             print("Uscita dal manager.")

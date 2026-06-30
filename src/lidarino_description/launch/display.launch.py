@@ -2,7 +2,7 @@ import os
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch_ros.actions import Node
-from launch.actions import DeclareLaunchArgument
+from launch.actions import DeclareLaunchArgument, TimerAction
 from launch.substitutions import LaunchConfiguration, Command, PathJoinSubstitution
 from launch_ros.substitutions import FindPackageShare
 from launch_ros.parameter_descriptions import ParameterValue
@@ -50,10 +50,14 @@ def generate_launch_description():
         arguments=['-d', rviz_config_file]
     )
 
+    delayed_rviz = TimerAction(
+        period=3.0,
+        actions=[rviz_node, jsp_gui_node]  # Avvia Rviz2 e Joint State Publisher GUI dopo 2 secondi
+    )
+
     # Ritorna e avvia tutti i nodi contemporaneamente
     return LaunchDescription([
         model_arg,
         rsp_node,
-        jsp_gui_node,
-        rviz_node
+        delayed_rviz,
     ])
