@@ -1,0 +1,9 @@
+repositories:
+    src/sllidar_ros2:
+        type: git
+        url: https://github.com/Slamtec/sllidar_ros2.git
+        version: main
+    src/m-explore-ros2:
+        type: git
+        url: https://github.com/robo-friends/m-explore-ros2.git
+        version: main

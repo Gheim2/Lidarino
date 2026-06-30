@@ -45,3 +45,7 @@ src/__pycache__/
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+# Third-party ROS 2 packages
+src/m-explore-ros2/
+src/sllidar_ros2/
