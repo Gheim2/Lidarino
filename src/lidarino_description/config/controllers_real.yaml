@@ -1,0 +1,29 @@
+controller_manager:
+  ros__parameters:
+    update_rate: 100  # Frequenza del loop di controllo (100 Hz)
+    use_sim_time: false
+
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+
+    diff_drive_controller:
+      type: diff_drive_controller/DiffDriveController
+
+joint_state_broadcaster:
+  ros__parameters:
+    publish_rate: 100
+    use_sim_time: false
+
+diff_drive_controller:
+  ros__parameters:
+    left_wheel_names: ["L_wheel_Revolute"]
+    right_wheel_names: ["R_wheel_Revolute"]
+    use_sim_time: false
+    wheel_separation: 0.128  # Distanza tra le ruote (in metri)
+    wheel_radius: 0.035      # Raggio delle ruote (in metri)
+    publish_rate: 50.0
+    
+    # Frame per l'odometria
+    base_frame_id: base_link
+    odom_frame_id: odom
+    enable_odom_tf: false

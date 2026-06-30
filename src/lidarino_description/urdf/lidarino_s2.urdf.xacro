@@ -3,13 +3,14 @@
     <xacro:property name="use_lidar_control" value="false" />
     <xacro:property name="mesh_url" value="package://lidarino_description/urdf/meshes/" />
     <xacro:arg name="yaml_file" default="$(find lidarino_description)/config/controllers_s2.yaml" />
+    <xacro:arg name="use_sim" default="true" />
     <xacro:include filename="materials.xacro" />
     <xacro:include filename="lidarino_core_s2.xacro" /> 
 
     <xacro:include filename="lidarino_gazebo.xacro" />
     <xacro:include filename="lidarino_ros2_control.xacro" />
     <xacro:lidarino_gazebo yaml_file="$(arg yaml_file)" />
-    <xacro:lidarino_ros2_control use_lidar_control="${use_lidar_control}" />
+    <xacro:lidarino_ros2_control use_lidar_control="${use_lidar_control}" use_sim="${use_sim}" />
     <xacro:include filename="astra_camera.xacro" />
     <xacro:include filename="rplidars2.xacro" />
     <xacro:include filename="imu.xacro" />

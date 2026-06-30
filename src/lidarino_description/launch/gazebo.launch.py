@@ -42,7 +42,7 @@ def generate_launch_description():
     ])
     world_file = PathJoinSubstitution([FindPackageShare('lidarino_description'), 'worlds', world])
     xacro_file = PathJoinSubstitution([pkg_share, 'urdf', ['lidarino_', model, '.urdf.xacro']])
-    robot_xacro_cmd = Command(['xacro ', xacro_file, ' yaml_file:=', yaml_config_file])
+    robot_xacro_cmd = Command(['xacro ', xacro_file, ' yaml_file:=', yaml_config_file, ' use_sim:=true'])
     robot_desc = ParameterValue(robot_xacro_cmd, value_type=str)
 
     rsp_node = Node(
