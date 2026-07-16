@@ -7,7 +7,7 @@ vcs import src < lidarino.repos
 
 # 2. Inserisce il blocco per il pacchetto non desiderato
 echo "Esclusione di multirobot_map_merge..."
-touch src/m-explore-ros2/multirobot_map_merge/COLCON_IGNORE
+touch src/m-explore-ros2/map_merge/COLCON_IGNORE
 
 # 3. Risolve le dipendenze di sistema
 echo "Installazione delle dipendenze ROS 2..."
