@@ -25,9 +25,10 @@ git clone https://github.com/Gheim2/Lidarino.git lidarino_ws
 cd lidarino_ws
 ```
 
-### 2. Import third-party dependencies (sllidar, m-explore)
+### 2. First config of the workspace (*IMPORTANT*)
 ```bash
-vcs import src < lidarino.repos
+sudo chmod +x setup_workspace.sh
+./setup_workspace.sh
 ```
 
 ## Build
@@ -35,7 +36,7 @@ vcs import src < lidarino.repos
 From workspace root:
 
 ```bash
-colcon build
+colcon build --symlink-install
 source install/setup.bash
 ```
 
@@ -43,13 +44,13 @@ source install/setup.bash
 
 ### Simulation (Gazebo)
 
-You can use ros_manager.py to run Gazebo and RVIZ or you can use the provided bash script:
+You can use ros_manager.py to run everything that you need:
 
 ```bash
-./launch_sim.sh
+python3 ros_manager.py
 ```
 
-To visualize the simulation manually run:
+To visualize the simulation manually you can run:
 
 ```bash
 rviz2 --ros-args -p use_sim_time:=true
