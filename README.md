@@ -19,8 +19,8 @@ The project is structured according to ROS 2 best practices:
 
 This repository uses a `.repos` file to cleanly manage external dependencies (like LiDAR drivers and exploration nodes) without bloating the main Git tree.
 
+### 1. Clone this repository
 ```bash
-# 1. Clone this repository
 git clone https://github.com/Gheim2/Lidarino.git lidarino_ws
 cd lidarino_ws
 ```
