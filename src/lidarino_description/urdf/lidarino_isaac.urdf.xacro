@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="lidarino">
+
+    <!-- ARGOMENTI E PROPRIETA' -->
+    <xacro:property name="use_lidar_control" value="false" />
+    <xacro:property name="mesh_url" value="package://lidarino_description/urdf/meshes/" />
+    <xacro:arg name="use_sim" default="true" />
+
+    <!-- 1. COLORI E MATERIALI -->
+    <xacro:include filename="materials.xacro" />
+
+    <!-- 2. CORPO CENTRALE E RUOTE (Versione S2) -->
+    <xacro:include filename="lidarino_core_s2.xacro" />
+
+    <!-- 3. SENSORI (Manteniamo i link e i joint fisici) -->
+    <xacro:include filename="rplidars2.xacro" />
+    <xacro:include filename="astra_camera.xacro" />
+    <xacro:include filename="imu.xacro" />
+
+    <xacro:astra_camera parent="base_link" xyz="0.098 0.0 0.013" rpy="0 0 3.141592653589793" />
+    <xacro:rplidars2 parent="base_link" xyz="-0.031 0.0 0.043" rpy="0 0 0" />
+    <xacro:imu_sensor parent="base_link" xyz="0.03 0.0 0.004" rpy="0 0 0" />
+
+    <!-- 
+         =========================================================
+         ESCLUSI APPOSITAMENTE PER ISAAC SIM:
+         <xacro:include filename="lidarino_gazebo.xacro" />
+         <xacro:include filename="lidarino_ros2_control.xacro" />
+         =========================================================
+         Motivo: Isaac Sim ignora i plugin Gazebo e gestirà i 
+         motori e l'odometria tramite OmniGraph (Differential Controller).
+    -->
+
+</robot>

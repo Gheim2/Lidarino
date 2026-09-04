@@ -1,0 +1,143 @@
+#usda 1.0
+(
+    customLayerData = {
+        string creator = "URDF USD Converter v0.1.3"
+    }
+    defaultPrim = "lidarino"
+    doc = """Generated from Composed Stage of root layer C:\\Users\\peppe\\AppData\\Local\\Temp\\tmpb1i1mlm9\\lidarino.usdc
+
+
+Generated from Composed Stage of root layer C:\\Users\\peppe\\AppData\\Local\\Temp\\urdf_import_lidarino_isaac_7pxmya4h\\usdex_lidarino_isaac\\lidarino.usdc
+
+
+Generated from Composed Stage of root layer C:\\Users\\peppe\\AppData\\Local\\Temp\\urdf_import_lidarino_isaac_7pxmya4h\\temp_lidarino_isaac\\lidarino_isaac.usd
+"""
+    kilogramsPerUnit = 1
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+over "lidarino" (
+    prepend apiSchemas = ["IsaacRobotAPI"]
+)
+{
+    prepend rel isaac:physics:robotJoints = [
+        </lidarino/Physics/root_joint>,
+        </lidarino/Physics/L_wheel_Revolute>,
+        </lidarino/Physics/R_wheel_Revolute>,
+        </lidarino/Physics/caster_fixed>,
+        </lidarino/Physics/astra_joint>,
+        </lidarino/Physics/rplidars2_joint>,
+        </lidarino/Physics/imu_joint>,
+    ]
+    prepend rel isaac:physics:robotLinks = [
+        </lidarino/Geometry/base_link>,
+        </lidarino/Geometry/base_link/wheel_L>,
+        </lidarino/Geometry/base_link/wheel_R>,
+        </lidarino/Geometry/base_link/caster>,
+        </lidarino/Geometry/base_link/astra_link>,
+        </lidarino/Geometry/base_link/rplidars2_link>,
+        </lidarino/Geometry/base_link/imu_link>,
+    ]
+    token isaac:robotType = "Wheeled"
+
+    over "Geometry"
+    {
+        over "base_link" (
+            prepend apiSchemas = ["IsaacLinkAPI"]
+        )
+        {
+            over "wheel_L" (
+                prepend apiSchemas = ["IsaacLinkAPI"]
+            )
+            {
+            }
+
+            over "wheel_R" (
+                prepend apiSchemas = ["IsaacLinkAPI"]
+            )
+            {
+            }
+
+            over "caster" (
+                prepend apiSchemas = ["IsaacLinkAPI"]
+            )
+            {
+            }
+
+            over "astra_link" (
+                prepend apiSchemas = ["IsaacLinkAPI"]
+            )
+            {
+                over "astra_optical_frame" (
+                    prepend apiSchemas = ["IsaacSiteAPI"]
+                )
+                {
+                }
+            }
+
+            over "rplidars2_link" (
+                prepend apiSchemas = ["IsaacLinkAPI"]
+            )
+            {
+                over "rplidars2_laser_link" (
+                    prepend apiSchemas = ["IsaacSiteAPI"]
+                )
+                {
+                }
+            }
+
+            over "imu_link" (
+                prepend apiSchemas = ["IsaacLinkAPI"]
+            )
+            {
+            }
+        }
+    }
+
+    over "Physics"
+    {
+        over "root_joint" (
+            prepend apiSchemas = ["IsaacJointAPI"]
+        )
+        {
+        }
+
+        over "L_wheel_Revolute" (
+            prepend apiSchemas = ["IsaacJointAPI"]
+        )
+        {
+        }
+
+        over "R_wheel_Revolute" (
+            prepend apiSchemas = ["IsaacJointAPI"]
+        )
+        {
+        }
+
+        over "caster_fixed" (
+            prepend apiSchemas = ["IsaacJointAPI"]
+        )
+        {
+        }
+
+        over "astra_joint" (
+            prepend apiSchemas = ["IsaacJointAPI"]
+        )
+        {
+        }
+
+        over "rplidars2_joint" (
+            prepend apiSchemas = ["IsaacJointAPI"]
+        )
+        {
+        }
+
+        over "imu_joint" (
+            prepend apiSchemas = ["IsaacJointAPI"]
+        )
+        {
+        }
+    }
+}
+

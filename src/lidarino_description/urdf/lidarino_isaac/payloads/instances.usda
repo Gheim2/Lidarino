@@ -1,0 +1,144 @@
+#usda 1.0
+(
+    customLayerData = {
+        string creator = "URDF USD Converter v0.1.3"
+    }
+    doc = """Generated from Composed Stage of root layer C:\\Users\\peppe\\AppData\\Local\\Temp\\tmpb1i1mlm9\\lidarino.usdc
+
+
+Generated from Composed Stage of root layer C:\\Users\\peppe\\AppData\\Local\\Temp\\urdf_import_lidarino_isaac_7pxmya4h\\usdex_lidarino_isaac\\lidarino.usdc
+
+
+Generated from Composed Stage of root layer C:\\Users\\peppe\\AppData\\Local\\Temp\\urdf_import_lidarino_isaac_7pxmya4h\\temp_lidarino_isaac\\lidarino_isaac.usd
+
+
+Generated from Composed Stage of root layer C:\\isaacSim\\IsaacSim-ros_workspaces\\jazzy_ws\\src\\lidarino_repo\\src\\lidarino_description\\urdf\\lidarino_isaac\\payloads\\base.usd
+"""
+    kilogramsPerUnit = 1
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Scope "Instances"
+{
+    def Xform "base_link_visual" (
+        prepend references = @./geometries.usd@</Geometries/base_link_visual>
+    )
+    {
+        over "base_link_visual" (
+            apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            custom rel material:binding
+            prepend rel material:binding = </Instances/base_link_visual/VisualMaterials/steel_blue>
+            custom string urdf:name = "base_link_visual"
+        }
+
+        def Scope "VisualMaterials"
+        {
+            def Material "steel_blue" (
+                instanceable = true
+                prepend references = @./materials.usda@</Materials/steel_blue>
+            )
+            {
+            }
+        }
+    }
+
+    def Xform "wheel_L_visual" (
+        prepend references = @./geometries.usd@</Geometries/wheel_L_visual>
+    )
+    {
+        over "wheel_L_visual" (
+            apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            custom rel material:binding
+            prepend rel material:binding = </Instances/wheel_L_visual/VisualMaterials/black>
+            custom string urdf:name = "wheel_L_visual"
+        }
+
+        def Scope "VisualMaterials"
+        {
+            def Material "black" (
+                instanceable = true
+                prepend references = @./materials.usda@</Materials/black>
+            )
+            {
+            }
+        }
+    }
+
+    def Xform "wheel_L_visual_1" (
+        prepend references = @./geometries.usd@</Geometries/wheel_L_visual>
+    )
+    {
+        over "wheel_L_visual" (
+            apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            custom rel material:binding
+            prepend rel material:binding = </Instances/wheel_L_visual_1/VisualMaterials/black>
+            custom string urdf:name = "wheel_R_visual"
+        }
+
+        def Scope "VisualMaterials"
+        {
+            def Material "black" (
+                instanceable = true
+                prepend references = @./materials.usda@</Materials/black>
+            )
+            {
+            }
+        }
+    }
+
+    def Xform "astracamera_visual" (
+        prepend references = @./geometries.usd@</Geometries/astracamera_visual>
+    )
+    {
+        over "astracamera_visual" (
+            apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            custom rel material:binding
+            prepend rel material:binding = </Instances/astracamera_visual/VisualMaterials/dark_grey>
+            custom string urdf:name = "astracamera_visual"
+        }
+
+        def Scope "VisualMaterials"
+        {
+            def Material "dark_grey" (
+                instanceable = true
+                prepend references = @./materials.usda@</Materials/dark_grey>
+            )
+            {
+            }
+        }
+    }
+
+    def Xform "lidar_visual" (
+        prepend references = @./geometries.usd@</Geometries/lidar_visual>
+    )
+    {
+        over "lidar_visual" (
+            apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            custom rel material:binding
+            prepend rel material:binding = </Instances/lidar_visual/VisualMaterials/dark_grey>
+            custom string urdf:name = "lidar_visual"
+        }
+
+        def Scope "VisualMaterials"
+        {
+            def Material "dark_grey" (
+                instanceable = true
+                prepend references = @./materials.usda@</Materials/dark_grey>
+            )
+            {
+            }
+        }
+    }
+}
+

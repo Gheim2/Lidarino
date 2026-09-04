@@ -29,7 +29,7 @@ cd C:\IsaacSim-ros_workspaces\jazzy_ws\src
 git clone -b feature/isaac-sim https://github.com/Gheim2/Lidarino.git lidarino_repo
 ```
 
-### 2. First config of the workspace (*IMPORTANT*)
+### 3. First config of the workspace (*IMPORTANT*)
 Install `vcstool` via Pixi, enter the isolated environment, and run the setup script to fetch third-party packages:
 ```powershell
 cd C:\IsaacSim-ros_workspaces\jazzy_ws
@@ -57,6 +57,35 @@ To run the simulation with the native Windows ROS 2 bridge, start the following 
 1. **Terminal 1 (Zenoh Router):** `pixi run zenoh`
 2. **Terminal 2 (Isaac Sim):** `pixi run sim`
 3. **Terminal 3 (ROS 2 Nodes):** `pixi shell` -> launch your nodes here.
+
+---
+
+## Advanced: Custom URDF to USD Conversion
+
+Unlike Gazebo, NVIDIA Isaac Sim natively uses Pixar's **USD (Universal Scene Description)** format. The `.usd` model is already provided in this repository. However, if you modify the URDF or want to import your own, follow these steps:
+
+### 1. Generate the static URDF
+Isaac Sim parses plain `.urdf` files better than `.xacro`. Open your Pixi shell and compile the Isaac-specific Xacro file using the `-o` flag to ensure the correct UTF-8 encoding on Windows:
+
+```powershell
+# Open the Pixi shell
+pixi shell
+
+# Navigate to the URDF directory
+cd src/lidarino_repo/src/lidarino_description/urdf
+
+# Compile the Xacro into a static URDF
+xacro lidarino_isaac.urdf.xacro -o lidarino_isaac.urdf
+```
+
+### 2. Import into Isaac Sim
+1. Launch Isaac Sim (`pixi run sim`).
+2. Go to **File > Import**.
+3. Select the newly generated `lidarino_isaac.urdf` as the Input File.
+4. Select the **Robot type** if needed.
+5. Click **Import** and save the scene as a `.usd` file.
+
+---
 
 ## Contributing
 
