@@ -4,13 +4,13 @@
         string creator = "URDF USD Converter v0.1.3"
     }
     defaultPrim = "lidarino"
-    doc = """Generated from Composed Stage of root layer C:\\Users\\peppe\\AppData\\Local\\Temp\\tmpb1i1mlm9\\lidarino.usdc
+    doc = """Generated from Composed Stage of root layer C:\\Users\\peppe\\AppData\\Local\\Temp\\tmpep309oz8\\lidarino.usdc
 
 
-Generated from Composed Stage of root layer C:\\Users\\peppe\\AppData\\Local\\Temp\\urdf_import_lidarino_isaac_7pxmya4h\\usdex_lidarino_isaac\\lidarino.usdc
+Generated from Composed Stage of root layer C:\\Users\\peppe\\AppData\\Local\\Temp\\urdf_import_lidarino_isaac_brtnp7ry\\usdex_lidarino_isaac\\lidarino.usdc
 
 
-Generated from Composed Stage of root layer C:\\Users\\peppe\\AppData\\Local\\Temp\\urdf_import_lidarino_isaac_7pxmya4h\\temp_lidarino_isaac\\lidarino_isaac.usd
+Generated from Composed Stage of root layer C:\\Users\\peppe\\AppData\\Local\\Temp\\urdf_import_lidarino_isaac_brtnp7ry\\temp_lidarino_isaac\\lidarino_isaac.usd
 
 
 Generated from Composed Stage of root layer C:\\isaacSim\\IsaacSim-ros_workspaces\\jazzy_ws\\src\\lidarino_repo\\src\\lidarino_description\\urdf\\lidarino_isaac\\payloads\\base.usd
@@ -41,10 +41,6 @@ over "lidarino"
             uniform double mjc:forceRange:min = -10
             custom rel mjc:target
             prepend rel mjc:target = </lidarino/Physics/R_wheel_Revolute>
-        }
-
-        over "root_joint"
-        {
         }
 
         over "L_wheel_Revolute" (

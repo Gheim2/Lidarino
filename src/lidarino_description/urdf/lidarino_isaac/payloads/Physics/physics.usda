@@ -4,13 +4,13 @@
         string creator = "URDF USD Converter v0.1.3"
     }
     defaultPrim = "lidarino"
-    doc = """Generated from Composed Stage of root layer C:\\Users\\peppe\\AppData\\Local\\Temp\\tmpb1i1mlm9\\lidarino.usdc
+    doc = """Generated from Composed Stage of root layer C:\\Users\\peppe\\AppData\\Local\\Temp\\tmpep309oz8\\lidarino.usdc
 
 
-Generated from Composed Stage of root layer C:\\Users\\peppe\\AppData\\Local\\Temp\\urdf_import_lidarino_isaac_7pxmya4h\\usdex_lidarino_isaac\\lidarino.usdc
+Generated from Composed Stage of root layer C:\\Users\\peppe\\AppData\\Local\\Temp\\urdf_import_lidarino_isaac_brtnp7ry\\usdex_lidarino_isaac\\lidarino.usdc
 
 
-Generated from Composed Stage of root layer C:\\Users\\peppe\\AppData\\Local\\Temp\\urdf_import_lidarino_isaac_7pxmya4h\\temp_lidarino_isaac\\lidarino_isaac.usd
+Generated from Composed Stage of root layer C:\\Users\\peppe\\AppData\\Local\\Temp\\urdf_import_lidarino_isaac_brtnp7ry\\temp_lidarino_isaac\\lidarino_isaac.usd
 
 
 Generated from Composed Stage of root layer C:\\isaacSim\\IsaacSim-ros_workspaces\\jazzy_ws\\src\\lidarino_repo\\src\\lidarino_description\\urdf\\lidarino_isaac\\payloads\\base.usd
@@ -144,7 +144,10 @@ over "lidarino"
             prepend apiSchemas = ["PhysicsDriveAPI:angular", "PhysicsJointStateAPI:angular"]
         )
         {
+            float drive:angular:physics:damping = 10000000
             float drive:angular:physics:maxForce = 10
+            float drive:angular:physics:stiffness = 0
+            uniform token drive:angular:physics:type = "force"
             uniform token physics:axis = "Z"
             custom rel physics:body0
             prepend rel physics:body0 = </lidarino/Geometry/base_link>
@@ -162,7 +165,10 @@ over "lidarino"
             prepend apiSchemas = ["PhysicsDriveAPI:angular", "PhysicsJointStateAPI:angular"]
         )
         {
+            float drive:angular:physics:damping = 10000000
             float drive:angular:physics:maxForce = 10
+            float drive:angular:physics:stiffness = 0
+            uniform token drive:angular:physics:type = "force"
             uniform token physics:axis = "Z"
             custom rel physics:body0
             prepend rel physics:body0 = </lidarino/Geometry/base_link>
@@ -174,18 +180,6 @@ over "lidarino"
             quatf physics:localRot1 = (1, 0, 0, 0)
             custom float urdf:limit:effort = 10
             custom float urdf:limit:velocity = 20
-        }
-
-        def PhysicsFixedJoint "root_joint"
-        {
-            custom rel physics:body0
-            prepend rel physics:body0 = </lidarino>
-            custom rel physics:body1
-            prepend rel physics:body1 = </lidarino/Geometry/base_link>
-            point3f physics:localPos0 = (0, 0, 0)
-            point3f physics:localPos1 = (0, 0, 0)
-            quatf physics:localRot0 = (1, 0, 0, 0)
-            quatf physics:localRot1 = (1, 0, 0, 0)
         }
 
         def PhysicsFixedJoint "caster_fixed"
