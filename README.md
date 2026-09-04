@@ -1,6 +1,6 @@
-# Lidarino 🤖
+# Lidarino 🤖 (Isaac Sim Edition)
 
-Lidarino is a custom ROS 2 differential-drive robot project. This workspace contains the robot description (URDF), custom hardware interfaces for ESP32 microcontrollers, and the bringup launch files required for autonomous navigation and SLAM.
+Lidarino is a custom ROS 2 differential-drive robot project. This branch is specifically tailored for **Windows** native execution using **NVIDIA Isaac Sim** and **Pixi** for environment and dependency management.
 
 ## Workspace Architecture
 
@@ -11,50 +11,52 @@ The project is structured according to ROS 2 best practices:
 
 ## Requirements
 
-- ROS 2 (Jazzy or supported distro)
-- `colcon build`
-- `vcs` (vcstool) to manage third-party dependencies.
+- Windows 11
+- [Pixi](https://pixi.sh/) package manager
+- [NVIDIA Isaac Sim](https://docs.omniverse.nvidia.com/isaacsim/latest/index.html)
+- NVIDIA `IsaacSim-ros_workspaces` repository
 
 ## Installation
 
-This repository uses a `.repos` file to cleanly manage external dependencies (like LiDAR drivers and exploration nodes) without bloating the main Git tree.
+This repository uses a `.repos` file and a PowerShell script to cleanly manage external dependencies (like LiDAR drivers and exploration nodes) without bloating the main Git tree.
 
-### 1. Clone this repository
-```bash
-git clone https://github.com/Gheim2/Lidarino.git lidarino_ws
-cd lidarino_ws
+### 1. Setup Isaac Sim Workspace
+First, follow the official NVIDIA documentation to clone the `IsaacSim-ros_workspaces` repository and set up the `jazzy_ws` workspace.
+
+### 2. Clone this repository
+```powershell
+cd C:\IsaacSim-ros_workspaces\jazzy_ws\src
+git clone -b feature/isaac-sim https://github.com/Gheim2/Lidarino.git lidarino_repo
 ```
 
 ### 2. First config of the workspace (*IMPORTANT*)
-```bash
-sudo chmod +x setup_workspace.sh
-./setup_workspace.sh
+Install `vcstool` via Pixi, enter the isolated environment, and run the setup script to fetch third-party packages:
+```powershell
+cd C:\IsaacSim-ros_workspaces\jazzy_ws
+pixi add vcstool
+pixi shell
+cd src\lidarino_repo
+.\setup_workspace.ps1
 ```
 
 ## Build
 
-From workspace root:
+From the `jazzy_ws` workspace root, build the workspace using the Pixi-managed MSVC toolchain:
 
-```bash
-colcon build --symlink-install
-source install/setup.bash
+```powershell
+cd C:\isaacSim\IsaacSim-ros_workspaces\jazzy_ws
+pixi run build
 ```
 
 ## Run
 
 ### Simulation (Gazebo)
 
-You can use ros_manager.py to run everything that you need:
+To run the simulation with the native Windows ROS 2 bridge, start the following in separate PowerShell windows from the `jazzy_ws` root:
 
-```bash
-python3 ros_manager.py
-```
-
-To visualize the simulation manually you can run:
-
-```bash
-rviz2 --ros-args -p use_sim_time:=true
-```
+1. **Terminal 1 (Zenoh Router):** `pixi run zenoh`
+2. **Terminal 2 (Isaac Sim):** `pixi run sim`
+3. **Terminal 3 (ROS 2 Nodes):** `pixi shell` -> launch your nodes here.
 
 ## Contributing
 
