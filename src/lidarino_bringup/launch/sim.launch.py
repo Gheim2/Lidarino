@@ -160,13 +160,13 @@ def generate_launch_description():
 
     navigation_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([
-            PathJoinSubstitution([FindPackageShare('lidarino_description'), 'launch', 'navigation.launch.py'])
+            PathJoinSubstitution([FindPackageShare('lidarino_bringup'), 'launch', 'navigation.launch.py'])
         ])
     )
 
     slam_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([
-            PathJoinSubstitution([FindPackageShare('lidarino_description'), 'launch', 'slam.launch.py'])
+            PathJoinSubstitution([FindPackageShare('lidarino_bringup'), 'launch', 'slam.launch.py'])
         ])
     )
 
