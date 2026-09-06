@@ -4,16 +4,16 @@
         string creator = "URDF USD Converter v0.1.3"
     }
     defaultPrim = "lidarino"
-    doc = """Generated from Composed Stage of root layer C:\\Users\\peppe\\AppData\\Local\\Temp\\tmpep309oz8\\lidarino.usdc
+    doc = """Generated from Composed Stage of root layer C:\\Users\\peppe\\AppData\\Local\\Temp\\tmpr2hi5kkx\\lidarino.usdc
 
 
-Generated from Composed Stage of root layer C:\\Users\\peppe\\AppData\\Local\\Temp\\urdf_import_lidarino_isaac_brtnp7ry\\usdex_lidarino_isaac\\lidarino.usdc
+Generated from Composed Stage of root layer C:\\Users\\peppe\\AppData\\Local\\Temp\\urdf_import_isaac_palxlsjk\\usdex_isaac\\lidarino.usdc
 
 
-Generated from Composed Stage of root layer C:\\Users\\peppe\\AppData\\Local\\Temp\\urdf_import_lidarino_isaac_brtnp7ry\\temp_lidarino_isaac\\lidarino_isaac.usd
+Generated from Composed Stage of root layer C:\\Users\\peppe\\AppData\\Local\\Temp\\urdf_import_isaac_palxlsjk\\temp_isaac\\isaac.usd
 
 
-Generated from Composed Stage of root layer C:\\isaacSim\\IsaacSim-ros_workspaces\\jazzy_ws\\src\\lidarino_repo\\src\\lidarino_description\\urdf\\lidarino_isaac\\payloads\\base.usd
+Generated from Composed Stage of root layer C:\\isaacSim\\IsaacSim-ros_workspaces\\jazzy_ws\\src\\lidarino_repo\\src\\lidarino_description\\urdf\\isaac\\payloads\\base.usd
 """
     kilogramsPerUnit = 1
     metersPerUnit = 1
@@ -30,9 +30,9 @@ over "lidarino"
         {
             bool newton:selfCollisionEnabled = 0
             point3f physics:centerOfMass = (-0.006272413, 1.3799035e-8, 0.013070827)
-            float3 physics:diagonalInertia = (0.0006319112, 0.0009043843, 0.0014387222)
-            float physics:mass = 0.3336049
-            quatf physics:principalAxes = (0.9995563, -2.2198778e-8, -0.029785167, 2.756809e-7)
+            float3 physics:diagonalInertia = (0.00103602, 0.002440053, 0.0031900892)
+            float physics:mass = 0.42393145
+            quatf physics:principalAxes = (0.99907804, -0.005665119, -0.026366673, -0.033403266)
 
             over "wheel_L" (
                 prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
@@ -76,6 +76,22 @@ over "lidarino"
                 quatf physics:principalAxes = (1, 0, 0, 0)
 
                 over "caster_collision" (
+                    prepend apiSchemas = ["NewtonCollisionAPI"]
+                )
+                {
+                }
+            }
+
+            over "body_lid" (
+                prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+            )
+            {
+                point3f physics:centerOfMass = (-0.012951395, -3.1479385e-7, 0.06881042)
+                float3 physics:diagonalInertia = (0.00014893325, 0.00022995882, 0.00037747002)
+                float physics:mass = 0.0526138
+                quatf physics:principalAxes = (0.99999887, 1.0153451e-7, 0.0014934152, 0.000002346492)
+
+                over "body_lid_collision" (
                     prepend apiSchemas = ["NewtonCollisionAPI"]
                 )
                 {
@@ -144,16 +160,13 @@ over "lidarino"
             prepend apiSchemas = ["PhysicsDriveAPI:angular", "PhysicsJointStateAPI:angular"]
         )
         {
-            float drive:angular:physics:damping = 10000000
             float drive:angular:physics:maxForce = 10
-            float drive:angular:physics:stiffness = 0
-            uniform token drive:angular:physics:type = "force"
             uniform token physics:axis = "Z"
             custom rel physics:body0
             prepend rel physics:body0 = </lidarino/Geometry/base_link>
             custom rel physics:body1
             prepend rel physics:body1 = </lidarino/Geometry/base_link/wheel_L>
-            point3f physics:localPos0 = (-0.06, 0.06, 0.015)
+            point3f physics:localPos0 = (-0.085, 0.06, 0.015)
             point3f physics:localPos1 = (0, 0, 0)
             quatf physics:localRot0 = (0.70710677, -0.70710677, 0, 0)
             quatf physics:localRot1 = (0, -1, 0, 0)
@@ -165,21 +178,30 @@ over "lidarino"
             prepend apiSchemas = ["PhysicsDriveAPI:angular", "PhysicsJointStateAPI:angular"]
         )
         {
-            float drive:angular:physics:damping = 10000000
             float drive:angular:physics:maxForce = 10
-            float drive:angular:physics:stiffness = 0
-            uniform token drive:angular:physics:type = "force"
             uniform token physics:axis = "Z"
             custom rel physics:body0
             prepend rel physics:body0 = </lidarino/Geometry/base_link>
             custom rel physics:body1
             prepend rel physics:body1 = </lidarino/Geometry/base_link/wheel_R>
-            point3f physics:localPos0 = (-0.06, -0.06, 0.015)
+            point3f physics:localPos0 = (-0.085, -0.06, 0.015)
             point3f physics:localPos1 = (0, 0, 0)
             quatf physics:localRot0 = (-0.70710677, 0.70710677, 0, 0)
             quatf physics:localRot1 = (1, 0, 0, 0)
             custom float urdf:limit:effort = 10
             custom float urdf:limit:velocity = 20
+        }
+
+        def PhysicsFixedJoint "root_joint"
+        {
+            custom rel physics:body0
+            prepend rel physics:body0 = </lidarino>
+            custom rel physics:body1
+            prepend rel physics:body1 = </lidarino/Geometry/base_link>
+            point3f physics:localPos0 = (0, 0, 0)
+            point3f physics:localPos1 = (0, 0, 0)
+            quatf physics:localRot0 = (1, 0, 0, 0)
+            quatf physics:localRot1 = (1, 0, 0, 0)
         }
 
         def PhysicsFixedJoint "caster_fixed"
@@ -188,7 +210,19 @@ over "lidarino"
             prepend rel physics:body0 = </lidarino/Geometry/base_link>
             custom rel physics:body1
             prepend rel physics:body1 = </lidarino/Geometry/base_link/caster>
-            point3f physics:localPos0 = (0.052, 0, -0.013)
+            point3f physics:localPos0 = (0.077, 0, -0.013)
+            point3f physics:localPos1 = (0, 0, 0)
+            quatf physics:localRot0 = (1, 0, 0, 0)
+            quatf physics:localRot1 = (1, 0, 0, 0)
+        }
+
+        def PhysicsFixedJoint "body_lid_fixed"
+        {
+            custom rel physics:body0
+            prepend rel physics:body0 = </lidarino/Geometry/base_link>
+            custom rel physics:body1
+            prepend rel physics:body1 = </lidarino/Geometry/base_link/body_lid>
+            point3f physics:localPos0 = (0, 0, 0.07)
             point3f physics:localPos1 = (0, 0, 0)
             quatf physics:localRot0 = (1, 0, 0, 0)
             quatf physics:localRot1 = (1, 0, 0, 0)
@@ -200,7 +234,7 @@ over "lidarino"
             prepend rel physics:body0 = </lidarino/Geometry/base_link>
             custom rel physics:body1
             prepend rel physics:body1 = </lidarino/Geometry/base_link/astra_link>
-            point3f physics:localPos0 = (0.098, 0, 0.013)
+            point3f physics:localPos0 = (0.12, 0, 0.025)
             point3f physics:localPos1 = (0, 0, 0)
             quatf physics:localRot0 = (6.123234e-17, 0, 0, 1)
             quatf physics:localRot1 = (1, 0, 0, 0)
@@ -212,7 +246,7 @@ over "lidarino"
             prepend rel physics:body0 = </lidarino/Geometry/base_link>
             custom rel physics:body1
             prepend rel physics:body1 = </lidarino/Geometry/base_link/rplidars2_link>
-            point3f physics:localPos0 = (-0.031, 0, 0.043)
+            point3f physics:localPos0 = (-0.056, 0, 0.053)
             point3f physics:localPos1 = (0, 0, 0)
             quatf physics:localRot0 = (1, 0, 0, 0)
             quatf physics:localRot1 = (1, 0, 0, 0)
@@ -224,7 +258,7 @@ over "lidarino"
             prepend rel physics:body0 = </lidarino/Geometry/base_link>
             custom rel physics:body1
             prepend rel physics:body1 = </lidarino/Geometry/base_link/imu_link>
-            point3f physics:localPos0 = (0.03, 0, 0.004)
+            point3f physics:localPos0 = (-0.092, 0, 0.02)
             point3f physics:localPos1 = (0, 0, 0)
             quatf physics:localRot0 = (1, 0, 0, 0)
             quatf physics:localRot1 = (1, 0, 0, 0)

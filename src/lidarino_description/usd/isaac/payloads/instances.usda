@@ -3,16 +3,16 @@
     customLayerData = {
         string creator = "URDF USD Converter v0.1.3"
     }
-    doc = """Generated from Composed Stage of root layer C:\\Users\\peppe\\AppData\\Local\\Temp\\tmpep309oz8\\lidarino.usdc
+    doc = """Generated from Composed Stage of root layer C:\\Users\\peppe\\AppData\\Local\\Temp\\tmpr2hi5kkx\\lidarino.usdc
 
 
-Generated from Composed Stage of root layer C:\\Users\\peppe\\AppData\\Local\\Temp\\urdf_import_lidarino_isaac_brtnp7ry\\usdex_lidarino_isaac\\lidarino.usdc
+Generated from Composed Stage of root layer C:\\Users\\peppe\\AppData\\Local\\Temp\\urdf_import_isaac_palxlsjk\\usdex_isaac\\lidarino.usdc
 
 
-Generated from Composed Stage of root layer C:\\Users\\peppe\\AppData\\Local\\Temp\\urdf_import_lidarino_isaac_brtnp7ry\\temp_lidarino_isaac\\lidarino_isaac.usd
+Generated from Composed Stage of root layer C:\\Users\\peppe\\AppData\\Local\\Temp\\urdf_import_isaac_palxlsjk\\temp_isaac\\isaac.usd
 
 
-Generated from Composed Stage of root layer C:\\isaacSim\\IsaacSim-ros_workspaces\\jazzy_ws\\src\\lidarino_repo\\src\\lidarino_description\\urdf\\lidarino_isaac\\payloads\\base.usd
+Generated from Composed Stage of root layer C:\\isaacSim\\IsaacSim-ros_workspaces\\jazzy_ws\\src\\lidarino_repo\\src\\lidarino_description\\urdf\\isaac\\payloads\\base.usd
 """
     kilogramsPerUnit = 1
     metersPerUnit = 1
@@ -87,6 +87,30 @@ def Scope "Instances"
             def Material "black" (
                 instanceable = true
                 prepend references = @./materials.usda@</Materials/black>
+            )
+            {
+            }
+        }
+    }
+
+    def Xform "body_lid_visual" (
+        prepend references = @./geometries.usd@</Geometries/body_lid_visual>
+    )
+    {
+        over "body_lid_visual" (
+            apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            custom rel material:binding
+            prepend rel material:binding = </Instances/body_lid_visual/VisualMaterials/steel_blue>
+            custom string urdf:name = "body_lid_visual"
+        }
+
+        def Scope "VisualMaterials"
+        {
+            def Material "steel_blue" (
+                instanceable = true
+                prepend references = @./materials.usda@</Materials/steel_blue>
             )
             {
             }

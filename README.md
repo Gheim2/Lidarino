@@ -75,15 +75,16 @@ pixi shell
 cd src/lidarino_repo/src/lidarino_description/urdf
 
 # Compile the Xacro into a static URDF
-xacro lidarino_isaac.urdf.xacro -o lidarino_isaac.urdf
+xacro .\lidarino_isaac.urdf.xacro "namespace:=" | Out-File -Encoding utf8 isaac.urdf
 ```
 
 ### 2. Import into Isaac Sim
 1. Launch Isaac Sim (`pixi run sim`).
 2. Go to **File > Import**.
-3. Select the newly generated `lidarino_isaac.urdf` as the Input File.
+3. Select the newly generated `isaac.urdf` as the Input File.
 4. Select the **Robot type** if needed.
-5. Click **Import** and save the scene as a `.usd` file.
+5. Select the **Base type** (usually `Mobile`).
+6. Click **Import** and save the scene as a `.usd` file.
 
 ---
 
