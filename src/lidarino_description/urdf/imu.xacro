@@ -19,14 +19,14 @@
             <visual name="imu_visual">
                 <origin xyz="0 0 0" rpy="0 0 0" />
                 <geometry>
-                    <box size="0.02 0.02 0.005" />
+                    <box size="0.005 0.005 0.005" />
                 </geometry>
                 <material name="dark_grey" />
             </visual>
             <collision name="imu_collision">
                 <origin xyz="0 0 0" rpy="0 0 0" />
                 <geometry>
-                    <box size="0.02 0.02 0.005" />
+                    <box size="0.005 0.005 0.005" />
                 </geometry>
             </collision>
         </link>
