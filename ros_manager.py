@@ -2,26 +2,25 @@ import subprocess
 import sys
 import os
 
-# --- CONFIGURAZIONE ---
-# Modifica questo percorso se il tuo file setup.bash si trova altrove
-WORKSPACE_SETUP = "install/setup.bash"
+# --- CONFIGURAZIONE WINDOWS ---
+# Su Windows colcon genera file .bat, non .bash
+WORKSPACE_SETUP = r"install\setup.bat"
 
 def run_command(command, needs_sourcing=False):
-    """Esegue un comando nel terminale. Se needs_sourcing è True, fa prima il source del workspace."""
+    """Esegue un comando in CMD. Se needs_sourcing è True, fa prima il call del workspace."""
     
     if needs_sourcing and os.path.exists(WORKSPACE_SETUP):
-        # Concatena il comando di source con il comando desiderato
-        full_command = f"bash -c 'source /opt/ros/jazzy/setup.bash && source {WORKSPACE_SETUP} && {command}'"
+        # Su Windows usiamo cmd /c e call per concatenare i comandi
+        full_command = f'cmd /c "call {WORKSPACE_SETUP} && {command}"'
     elif needs_sourcing:
-        print(f"\n[Avviso] File {WORKSPACE_SETUP} non trovato. Eseguo solo il source di ROS base.")
-        full_command = f"bash -c 'source /opt/ros/jazzy/setup.bash && {command}'"
+        print(f"\n[Avviso] File {WORKSPACE_SETUP} non trovato. Esegui prima la build (Opzione 1).")
+        full_command = command
     else:
         full_command = command
 
     print(f"\n[Esecuzione] {full_command}\n" + "-"*50)
     
     try:
-        # Esegue il comando. check=True alza un'eccezione se il comando fallisce
         subprocess.run(full_command, shell=True, check=True)
     except subprocess.CalledProcessError as e:
         print(f"\n[Errore] Il comando ha fallito con codice: {e.returncode}")
@@ -32,46 +31,40 @@ def run_command(command, needs_sourcing=False):
 
 def main():
     while True:
-        print("=== Lidarino ROS 2 Manager ===")
+        print("=== Lidarino ROS 2 Manager (Windows / Pixi Edition) ===")
         print("1. 🏗️\tColcon Build (compila tutto il workspace)")
-        print("2. 🌍\tAvvia Gazebo (Controller, Slam, Nav)")
-        print("3. 👁️\tAvvia Rviz2")
+        print("2. 🌍\tAvvia Isaac Sim Bridge (sim_isaac.launch.py)")
+        print("3. 👁️\tAvvia Rviz2 (Standalone)")
         print("4. 🖥️\tVisualizza Lidarino in Rviz2 [Solo display]")
-        # print("4. 🚀\tAttiva il Lidar")
-        print("5. 🎮\tControlla Lidarino con Tastiera (Teleop Twist Keyboard)")
+        print("5. 🎮\tControlla Lidarino con Tastiera (Teleop)")
         print("6. 🤖\tAvvia Esplorazione Autonoma (Explore Lite)")
         print("0. ❌\tEsci")
         
-
         scelta = input("\nSeleziona un'opzione: ")
 
         if scelta == '1':
             run_command("colcon build --symlink-install")
             
         elif scelta == '2':
-            print("\n[Avvio] Lancio Gazebo...")
-            # run_command("ros2 launch lidarino_description gazebo.launch.py", needs_sourcing=True)
-            run_command("./launch_sim.sh", needs_sourcing=False) 
+            print("\n[Avvio] Lancio nodi per Isaac Sim (TF, Navigation, SLAM)...")
+            run_command("ros2 launch lidarino_bringup sim_isaac.launch.py", needs_sourcing=True)
             
         elif scelta == '3':
             run_command("rviz2 --ros-args -p use_sim_time:=true", needs_sourcing=True)
 
         elif scelta == '4':
-            run_command("ros2 launch lidarino_description display.launch.py", needs_sourcing=True)
-
-        # Only for Lidarino v1
-        # elif scelta == '4':
-        #     vel = input("\n Seleziona velocità di rotazione Lidar [default: 9.4 rad/s (1.5 Hz)]: ") or "9.4"
-        #     run_command(f"ros2 topic pub /lidar_velocity_controller/commands std_msgs/msg/Float64MultiArray \"{{data: [{vel}]}}\"", needs_sourcing=True)
+            print("\n[Avvio] Lancio il display di Lidarino...")
+            run_command("ros2 launch lidarino_description display.launch.py variant:=isaac", needs_sourcing=True)
 
         elif scelta == '5':
             print("\n[Avvio] Lancio il controller tramite tastiera...")
-            run_command("ros2 run teleop_twist_keyboard teleop_twist_keyboard --ros-args -p stamped:=true -p frame_id:=base_link -r cmd_vel:=/diff_drive_controller/cmd_vel", needs_sourcing=True)
+            # Semplificato per usare il cmd_vel standard
+            run_command("ros2 run teleop_twist_keyboard teleop_twist_keyboard --ros-args -p stamped:=true -p frame_id:=base_link", needs_sourcing=True)
 
         elif scelta == '6':
             print("\n[Avvio] L'esplorazione autonoma...")
-            run_command("ros2 run explore_lite explore --ros-args --params-file /home/peppe/lidarino_ws/src/lidarino_description/config/explore.yaml", needs_sourcing=True)
-
+            # Modificato il path per essere relativo e compatibile con Windows
+            run_command(r"ros2 run explore_lite explore --ros-args --params-file src\lidarino_description\config\explore.yaml", needs_sourcing=True)
 
         elif scelta == '0':
             print("Uscita dal manager.")

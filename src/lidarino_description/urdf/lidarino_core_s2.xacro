@@ -112,6 +112,7 @@
         <child link="wheel_L" />
         <axis xyz="0.0 0.0 -1.0" />
         <limit effort="10.0" velocity="20.0" />
+        <dynamics damping="10000000.0" friction="0.1" />
     </joint>
 
     <joint name="R_wheel_Revolute" type="continuous">
@@ -120,6 +121,7 @@
         <child link="wheel_R" />
         <axis xyz="0.0 0.0 1.0" />
         <limit effort="10.0" velocity="20.0" />
+        <dynamics damping="10000000.0" friction="0.1" />
     </joint>
 
     <joint name="caster_fixed" type="fixed">
