@@ -5,6 +5,8 @@ build/
 install/
 src/old/
 src/__pycache__/
+.env
+
 # Compiled source #
 ###################
 *.com
