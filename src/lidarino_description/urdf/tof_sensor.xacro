@@ -2,7 +2,8 @@
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
     <xacro:property name="tof_radius" value="0.044" /> 
-    <xacro:property name="tof_z" value="-0.031" />      
+    <xacro:property name="tof_z" value="-0.031" />    
+    <xacro:arg name="sim" default="gazebo" />  
     
     <xacro:macro name="tof_sensor" params="id angle parent">    
         <link name="tof_${id}_link">
@@ -21,31 +22,33 @@
             <child link="tof_${id}_link"/>
             <origin xyz="${tof_radius * cos(angle)} ${tof_radius * sin(angle)} ${tof_z}" rpy="0 0 ${angle}" />
         </joint>
-
-        <gazebo reference="tof_${id}_link">
-            <sensor type="gpu_lidar" name="tof_${id}_sensor">
-                <topic>/scan_tof_${id}</topic>
-                <pose>0 0 0 0 0 0</pose>
-                <always_on>true</always_on>
-                <visualize>true</visualize>
-                <update_rate>100.0</update_rate>
-                <lidar>
-                    <scan>
-                        <horizontal>
-                            <samples>1</samples>
-                            <resolution>1</resolution>
-                            <min_angle>0.0</min_angle> <!-- era -0.218 -->
-                            <max_angle>0.0</max_angle> <!-- era 0.218 -->
-                        </horizontal>
-                    </scan>
-                    <range>
-                        <min>0.05</min>
-                        <max>2.0</max>
-                        <resolution>0.001</resolution>
-                    </range>
-                </lidar>
-                <gz_frame_id>tof_${id}_link</gz_frame_id>
-            </sensor>
-        </gazebo>
+        
+        <xacro:if value="${'$(arg sim)' == 'gazebo'}">
+            <gazebo reference="tof_${id}_link">
+                <sensor type="gpu_lidar" name="tof_${id}_sensor">
+                    <topic>/scan_tof_${id}</topic>
+                    <pose>0 0 0 0 0 0</pose>
+                    <always_on>true</always_on>
+                    <visualize>true</visualize>
+                    <update_rate>100.0</update_rate>
+                    <lidar>
+                        <scan>
+                            <horizontal>
+                                <samples>1</samples>
+                                <resolution>1</resolution>
+                                <min_angle>0.0</min_angle> <!-- era -0.218 -->
+                                <max_angle>0.0</max_angle> <!-- era 0.218 -->
+                            </horizontal>
+                        </scan>
+                        <range>
+                            <min>0.05</min>
+                            <max>2.0</max>
+                            <resolution>0.001</resolution>
+                        </range>
+                    </lidar>
+                    <gz_frame_id>tof_${id}_link</gz_frame_id>
+                </sensor>
+            </gazebo>
+        </xacro:if>
     </xacro:macro>
 </robot>

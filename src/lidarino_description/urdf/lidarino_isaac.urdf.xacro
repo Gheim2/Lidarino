@@ -5,6 +5,7 @@
     <xacro:property name="use_lidar_control" value="false" />
     <xacro:property name="mesh_url" value="package://lidarino_description/urdf/meshes/" />
     <xacro:arg name="use_sim" default="true" />
+    <xacro:arg name="sim" default="isaac" />
 
     <!-- 1. COLORI E MATERIALI -->
     <xacro:include filename="materials.xacro" />

@@ -178,26 +178,6 @@
     <child link="astra_optical_frame"/>
     <origin rpy="0 0 3.141592653589793" xyz="0 0 0.032"/>
   </joint>
-  <gazebo reference="astra_optical_frame">
-    <sensor name="astra_pro" type="rgbd_camera">
-      <topic>/astra/camera</topic>
-      <always_on>true</always_on>
-      <update_rate>5.0</update_rate>
-      <camera>
-        <horizontal_fov>1.047</horizontal_fov>
-        <image>
-          <width>640</width>
-          <height>480</height>
-          <format>R8G8B8</format>
-        </image>
-        <clip>
-          <near>0.1</near>
-          <far>8.0</far>
-        </clip>
-      </camera>
-      <gz_frame_id>astra_optical_frame</gz_frame_id>
-    </sensor>
-  </gazebo>
   <link name="rplidars2_link">
     <inertial>
       <origin rpy="0.0 0.0 0.0" xyz="-4.876953214253547e-05 6.129273590973731e-06 0.015121950727028356"/>
@@ -230,35 +210,6 @@
     <child link="rplidars2_laser_link"/>
     <origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.03"/>
   </joint>
-  <gazebo reference="rplidars2_laser_link">
-    <sensor name="rplidar_s2" type="gpu_lidar">
-      <topic>/scan</topic>
-      <always_on>true</always_on>
-      <visualize>false</visualize>
-      <update_rate>10.0</update_rate>
-      <gz_frame_id>rplidars2_laser_link</gz_frame_id>
-      <ray>
-        <scan>
-          <horizontal>
-            <samples>1000</samples>
-            <resolution>1.0</resolution>
-            <min_angle>-3.14159</min_angle>
-            <max_angle>3.14159</max_angle>
-          </horizontal>
-        </scan>
-        <range>
-          <min>0.08</min>
-          <max>30.0</max>
-          <resolution>0.013</resolution>
-        </range>
-        <noise>
-          <type>gaussian</type>
-          <mean>0.0</mean>
-          <stddev>0.01</stddev>
-        </noise>
-      </ray>
-    </sensor>
-  </gazebo>
   <link name="imu_link">
     <inertial>
       <!-- IMU reale tipica: pochi grammi, trascurabile dal punto di vista
@@ -286,74 +237,6 @@
     <child link="imu_link"/>
     <origin rpy="0 0 0" xyz="-0.092 0.0 0.02"/>
   </joint>
-  <gazebo reference="imu_link">
-    <sensor name="imu_sensor" type="imu">
-      <topic>/imu</topic>
-      <always_on>true</always_on>
-      <update_rate>100.0</update_rate>
-      <gz_frame_id>imu_link</gz_frame_id>
-      <imu>
-        <!--
-                        Rumore realistico: senza questo i valori sarebbero perfetti e
-                        l'EKF di robot_localization non avrebbe nulla da "fondere" in modo
-                        sensato — i pesi del filtro si baserebbero su covarianze finte.
-                        Valori tipici per un IMU MEMS economico (es. MPU6050 / BNO055-class).
-                    -->
-        <angular_velocity>
-          <x>
-            <noise type="gaussian">
-              <mean>0.0</mean>
-              <stddev>0.0003</stddev>
-              <bias_mean>0.0000075</bias_mean>
-              <bias_stddev>0.0000008</bias_stddev>
-            </noise>
-          </x>
-          <y>
-            <noise type="gaussian">
-              <mean>0.0</mean>
-              <stddev>0.0003</stddev>
-              <bias_mean>0.0000075</bias_mean>
-              <bias_stddev>0.0000008</bias_stddev>
-            </noise>
-          </y>
-          <z>
-            <noise type="gaussian">
-              <mean>0.0</mean>
-              <stddev>0.0003</stddev>
-              <bias_mean>0.0000075</bias_mean>
-              <bias_stddev>0.0000008</bias_stddev>
-            </noise>
-          </z>
-        </angular_velocity>
-        <linear_acceleration>
-          <x>
-            <noise type="gaussian">
-              <mean>0.0</mean>
-              <stddev>0.017</stddev>
-              <bias_mean>0.1</bias_mean>
-              <bias_stddev>0.001</bias_stddev>
-            </noise>
-          </x>
-          <y>
-            <noise type="gaussian">
-              <mean>0.0</mean>
-              <stddev>0.017</stddev>
-              <bias_mean>0.1</bias_mean>
-              <bias_stddev>0.001</bias_stddev>
-            </noise>
-          </y>
-          <z>
-            <noise type="gaussian">
-              <mean>0.0</mean>
-              <stddev>0.017</stddev>
-              <bias_mean>0.1</bias_mean>
-              <bias_stddev>0.001</bias_stddev>
-            </noise>
-          </z>
-        </linear_acceleration>
-      </imu>
-    </sensor>
-  </gazebo>
   <!-- 
          =========================================================
          ESCLUSI APPOSITAMENTE PER ISAAC SIM:

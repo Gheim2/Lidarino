@@ -10,17 +10,17 @@ from launch_ros.parameter_descriptions import ParameterValue
 def generate_launch_description():
     pkg_share = FindPackageShare('lidarino_description')
 
-    model_arg = DeclareLaunchArgument(
-        'model',
+    variant_arg = DeclareLaunchArgument(
+        'variant',
         default_value='s2',
-        choices=['v1', 's2'],
-        description='Seleziona il modello del robot: v1, s2'
+        choices=['v1', 's2', 'isaac'],
+        description='Variante URDF: s2 (Gazebo), v1 (Gazebo), isaac (Isaac Sim)'
     )
-    model = LaunchConfiguration('model')
+    variant = LaunchConfiguration('variant')
     xacro_file = PathJoinSubstitution([
         pkg_share,
         'urdf',
-        ['lidarino_', model, '.urdf.xacro']
+        ['lidarino_', variant, '.urdf.xacro']
     ])
 
     pkg_share_dir = get_package_share_directory('lidarino_description')

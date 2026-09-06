@@ -6,6 +6,7 @@
         Topic pubblicato: /imu (sensor_msgs/msg/Imu)
         Frame: imu_link (X=avanti, Y=sinistra, Z=su)
     -->
+    <xacro:arg name="sim" default="gazebo" />
     <xacro:macro name="imu_sensor" params="parent xyz rpy">
 
         <link name="imu_link">
@@ -37,74 +38,75 @@
             <origin xyz="${xyz}" rpy="${rpy}" />
         </joint>
 
-        <gazebo reference="imu_link">
-            <sensor type="imu" name="imu_sensor">
-                <topic>/imu</topic>
-                <always_on>true</always_on>
-                <update_rate>100.0</update_rate>
-                <gz_frame_id>imu_link</gz_frame_id>
-                <imu>
-                    <!--
-                        Rumore realistico: senza questo i valori sarebbero perfetti e
-                        l'EKF di robot_localization non avrebbe nulla da "fondere" in modo
-                        sensato — i pesi del filtro si baserebbero su covarianze finte.
-                        Valori tipici per un IMU MEMS economico (es. MPU6050 / BNO055-class).
-                    -->
-                    <angular_velocity>
-                        <x>
-                            <noise type="gaussian">
-                                <mean>0.0</mean>
-                                <stddev>0.0003</stddev>
-                                <bias_mean>0.0000075</bias_mean>
-                                <bias_stddev>0.0000008</bias_stddev>
-                            </noise>
-                        </x>
-                        <y>
-                            <noise type="gaussian">
-                                <mean>0.0</mean>
-                                <stddev>0.0003</stddev>
-                                <bias_mean>0.0000075</bias_mean>
-                                <bias_stddev>0.0000008</bias_stddev>
-                            </noise>
-                        </y>
-                        <z>
-                            <noise type="gaussian">
-                                <mean>0.0</mean>
-                                <stddev>0.0003</stddev>
-                                <bias_mean>0.0000075</bias_mean>
-                                <bias_stddev>0.0000008</bias_stddev>
-                            </noise>
-                        </z>
-                    </angular_velocity>
-                    <linear_acceleration>
-                        <x>
-                            <noise type="gaussian">
-                                <mean>0.0</mean>
-                                <stddev>0.017</stddev>
-                                <bias_mean>0.1</bias_mean>
-                                <bias_stddev>0.001</bias_stddev>
-                            </noise>
-                        </x>
-                        <y>
-                            <noise type="gaussian">
-                                <mean>0.0</mean>
-                                <stddev>0.017</stddev>
-                                <bias_mean>0.1</bias_mean>
-                                <bias_stddev>0.001</bias_stddev>
-                            </noise>
-                        </y>
-                        <z>
-                            <noise type="gaussian">
-                                <mean>0.0</mean>
-                                <stddev>0.017</stddev>
-                                <bias_mean>0.1</bias_mean>
-                                <bias_stddev>0.001</bias_stddev>
-                            </noise>
-                        </z>
-                    </linear_acceleration>
-                </imu>
-            </sensor>
-        </gazebo>
-
+        <xacro:if value="${'$(arg sim)' == 'gazebo'}">
+            <gazebo reference="imu_link">
+                <sensor type="imu" name="imu_sensor">
+                    <topic>/imu</topic>
+                    <always_on>true</always_on>
+                    <update_rate>100.0</update_rate>
+                    <gz_frame_id>imu_link</gz_frame_id>
+                    <imu>
+                        <!--
+                            Rumore realistico: senza questo i valori sarebbero perfetti e
+                            l'EKF di robot_localization non avrebbe nulla da "fondere" in modo
+                            sensato — i pesi del filtro si baserebbero su covarianze finte.
+                            Valori tipici per un IMU MEMS economico (es. MPU6050 / BNO055-class).
+                        -->
+                        <angular_velocity>
+                            <x>
+                                <noise type="gaussian">
+                                    <mean>0.0</mean>
+                                    <stddev>0.0003</stddev>
+                                    <bias_mean>0.0000075</bias_mean>
+                                    <bias_stddev>0.0000008</bias_stddev>
+                                </noise>
+                            </x>
+                            <y>
+                                <noise type="gaussian">
+                                    <mean>0.0</mean>
+                                    <stddev>0.0003</stddev>
+                                    <bias_mean>0.0000075</bias_mean>
+                                    <bias_stddev>0.0000008</bias_stddev>
+                                </noise>
+                            </y>
+                            <z>
+                                <noise type="gaussian">
+                                    <mean>0.0</mean>
+                                    <stddev>0.0003</stddev>
+                                    <bias_mean>0.0000075</bias_mean>
+                                    <bias_stddev>0.0000008</bias_stddev>
+                                </noise>
+                            </z>
+                        </angular_velocity>
+                        <linear_acceleration>
+                            <x>
+                                <noise type="gaussian">
+                                    <mean>0.0</mean>
+                                    <stddev>0.017</stddev>
+                                    <bias_mean>0.1</bias_mean>
+                                    <bias_stddev>0.001</bias_stddev>
+                                </noise>
+                            </x>
+                            <y>
+                                <noise type="gaussian">
+                                    <mean>0.0</mean>
+                                    <stddev>0.017</stddev>
+                                    <bias_mean>0.1</bias_mean>
+                                    <bias_stddev>0.001</bias_stddev>
+                                </noise>
+                            </y>
+                            <z>
+                                <noise type="gaussian">
+                                    <mean>0.0</mean>
+                                    <stddev>0.017</stddev>
+                                    <bias_mean>0.1</bias_mean>
+                                    <bias_stddev>0.001</bias_stddev>
+                                </noise>
+                            </z>
+                        </linear_acceleration>
+                    </imu>
+                </sensor>
+            </gazebo>
+        </xacro:if>
     </xacro:macro>
 </robot>
