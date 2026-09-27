@@ -44,6 +44,19 @@
                 <state_interface name="position"/>
                 <state_interface name="velocity"/>
             </joint>
+
+            <sensor name="battery_sensor">
+                <state_interface name="voltage"/>
+            </sensor>
+
+            <sensor name="imu_sensor">
+                <state_interface name="accel_x"/>
+                <state_interface name="accel_y"/>
+                <state_interface name="accel_z"/>
+                <state_interface name="gyro_x"/>
+                <state_interface name="gyro_y"/>
+                <state_interface name="gyro_z"/>
+            </sensor>
         </ros2_control>
     </xacro:macro>
 

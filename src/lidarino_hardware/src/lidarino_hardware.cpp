@@ -67,6 +67,15 @@ std::vector<hardware_interface::StateInterface> LidarinoSystemHardware::export_s
     // Ruota Destra
     state_interfaces.emplace_back(hardware_interface::StateInterface(info_.joints[1].name, hardware_interface::HW_IF_POSITION, &hw_pos_[1]));
     state_interfaces.emplace_back(hardware_interface::StateInterface(info_.joints[1].name, hardware_interface::HW_IF_VELOCITY, &hw_vel_[1]));
+    // IMU
+    state_interfaces.emplace_back(hardware_interface::StateInterface("imu_sensor", "accel_x", &hw_imu_accel_[0]));
+    state_interfaces.emplace_back(hardware_interface::StateInterface("imu_sensor", "accel_y", &hw_imu_accel_[1]));
+    state_interfaces.emplace_back(hardware_interface::StateInterface("imu_sensor", "accel_z", &hw_imu_accel_[2]));
+    state_interfaces.emplace_back(hardware_interface::StateInterface("imu_sensor", "gyro_x", &hw_imu_gyro_[0]));
+    state_interfaces.emplace_back(hardware_interface::StateInterface("imu_sensor", "gyro_y", &hw_imu_gyro_[1]));
+    state_interfaces.emplace_back(hardware_interface::StateInterface("imu_sensor", "gyro_z", &hw_imu_gyro_[2]));
+    // Batteria
+    state_interfaces.emplace_back(hardware_interface::StateInterface("battery_sensor", "voltage", &hw_battery_voltage_));
     return state_interfaces;
 }
 
@@ -109,6 +118,15 @@ hardware_interface::return_type LidarinoSystemHardware::read(const rclcpp::Time 
 
                 hw_pos_[0] = new_pos_l;
                 hw_pos_[1] = new_pos_r;
+
+                hw_imu_accel_[0] = static_cast<double>(tp->accel_x) /1000.0;
+                hw_imu_accel_[1] = static_cast<double>(tp->accel_y) /1000.0;
+                hw_imu_accel_[2] = static_cast<double>(tp->accel_z) /1000.0;
+                hw_imu_gyro_[0] = static_cast<double>(tp->gyro_x) /1000.0;
+                hw_imu_gyro_[1] = static_cast<double>(tp->gyro_y) /1000.0;
+                hw_imu_gyro_[2] = static_cast<double>(tp->gyro_z) /1000.0;
+
+                hw_battery_voltage_ = tp->battery_mv / 1000.0; // Converti mV in V
                 
                 // Rimuovi il pacchetto processato
                 rx_buffer_.erase(rx_buffer_.begin(), rx_buffer_.begin() + TELEMETRY_SIZE);

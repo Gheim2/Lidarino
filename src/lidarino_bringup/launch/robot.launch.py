@@ -46,6 +46,12 @@ def generate_launch_description():
         arguments=['diff_drive_controller', '--controller-manager', '/controller_manager'],
     )
 
+    imu_broadcaster_spawner = Node(
+        package='controller_manager',
+        executable='spawner',
+        arguments=['imu_broadcaster', '--controller-manager', '/controller_manager'],
+    )
+
     # Spawner dopo il controller_manager
     delay_joint_state_broadcaster_spawner = RegisterEventHandler(
         event_handler=OnProcessStart(
@@ -61,9 +67,17 @@ def generate_launch_description():
         )
     )
 
+    delay_imu_broadcaster_spawner = RegisterEventHandler(
+        event_handler=OnProcessStart(
+            target_action=controller_manager,
+            on_start=[imu_broadcaster_spawner],
+        )
+    )
+
     return LaunchDescription([
         node_robot_state_publisher,
         controller_manager,
         delay_joint_state_broadcaster_spawner,
         delay_diff_drive_controller_spawner
+        delay_imu_broadcaster_spawner
     ])
