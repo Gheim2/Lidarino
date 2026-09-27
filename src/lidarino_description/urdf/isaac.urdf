@@ -66,7 +66,7 @@
     <inertial>
       <origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0"/>
       <mass value="0.01"/>
-      <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6"/>
+      <inertia ixx="1e-4" ixy="0" ixz="0" iyy="1e-4" iyz="0" izz="1e-4"/>
     </inertial>
     <visual name="caster_visual">
       <origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0"/>
@@ -98,7 +98,7 @@
     <collision name="wheel_R_collision">
       <origin rpy="0 0 0" xyz="0 0 -0.017"/>
       <geometry>
-        <sphere radius="0.035"/>
+        <cylinder length="0.025" radius="0.035"/>
       </geometry>
     </collision>
   </link>
@@ -118,7 +118,7 @@
     <collision name="wheel_L_collision">
       <origin rpy="0 0 0" xyz="0 0 -0.017"/>
       <geometry>
-        <sphere radius="0.035"/>
+        <cylinder length="0.025" radius="0.035"/>
       </geometry>
     </collision>
   </link>
@@ -128,6 +128,7 @@
     <child link="wheel_L"/>
     <axis xyz="0.0 0.0 -1.0"/>
     <limit effort="10.0" velocity="20.0"/>
+    <dynamics damping="10000000.0" friction="0.1"/>
   </joint>
   <joint name="R_wheel_Revolute" type="continuous">
     <origin rpy="-1.5707963267948966 -0.0 0.0" xyz="-0.085 -0.06 0.015"/>
@@ -135,6 +136,7 @@
     <child link="wheel_R"/>
     <axis xyz="0.0 0.0 1.0"/>
     <limit effort="10.0" velocity="20.0"/>
+    <dynamics damping="10000000.0" friction="0.1"/>
   </joint>
   <joint name="caster_fixed" type="fixed">
     <origin rpy="0.0 0.0 0.0" xyz="0.077 0.0 -0.013"/>
@@ -146,6 +148,20 @@
     <parent link="base_link"/>
     <child link="body_lid"/>
   </joint>
+  <!-- Attrito zero per la caster -->
+  <gazebo reference="caster_link">
+    <mu1>0.0</mu1>
+    <mu2>0.0</mu2>
+  </gazebo>
+  <!-- Attrito alto per le ruote -->
+  <gazebo reference="left_wheel_link">
+    <mu1>1.0</mu1>
+    <mu2>1.0</mu2>
+  </gazebo>
+  <gazebo reference="right_wheel_link">
+    <mu1>1.0</mu1>
+    <mu2>1.0</mu2>
+  </gazebo>
   <link name="astra_link">
     <inertial>
       <origin rpy="0.0 0.0 0.0" xyz="0.021745856967737336 3.8230579211581216e-05 0.029303333814809707"/>
@@ -216,7 +232,7 @@
                      inerziale ma serve comunque un inertial valido per KDL/ros2_control -->
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <mass value="0.01"/>
-      <inertia ixx="1e-6" ixy="0.0" ixz="0.0" iyy="1e-6" iyz="0.0" izz="1e-6"/>
+      <inertia ixx="1e-4" ixy="0.0" ixz="0.0" iyy="1e-4" iyz="0.0" izz="1e-4"/>
     </inertial>
     <visual name="imu_visual">
       <origin rpy="0 0 0" xyz="0 0 0"/>

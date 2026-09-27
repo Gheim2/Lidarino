@@ -18,7 +18,7 @@
     <xacro:include filename="astra_camera.xacro" />
     <xacro:include filename="imu.xacro" />
 
-    <xacro:astra_camera parent="base_link" xyz="0.120 0.0 0.025" rpy="0 0 3.141592653589793" />
+    <xacro:astra_camera parent="base_link" xyz="0.120 0.0 0.025" rpy="1.570796 -1.570796 0" />
     <xacro:rplidars2 parent="base_link" xyz="-0.056 0.0 0.053" rpy="0 0 0" />
     <xacro:imu_sensor parent="base_link" xyz="-0.092 0.0 0.02" rpy="0 0 0" />
 

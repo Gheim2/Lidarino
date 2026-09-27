@@ -59,7 +59,7 @@ def main():
         elif scelta == '5':
             print("\n[Avvio] Lancio il controller tramite tastiera...")
             # Semplificato per usare il cmd_vel standard
-            run_command("ros2 run teleop_twist_keyboard teleop_twist_keyboard --ros-args -p stamped:=true -p frame_id:=base_link", needs_sourcing=True)
+            run_command("ros2 run teleop_twist_keyboard teleop_twist_keyboard", needs_sourcing=True)
 
         elif scelta == '6':
             print("\n[Avvio] L'esplorazione autonoma...")

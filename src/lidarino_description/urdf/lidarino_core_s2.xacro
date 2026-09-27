@@ -47,7 +47,7 @@
         <inertial>
             <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
             <mass value="0.01" />
-            <inertia ixx="1e-6" iyy="1e-6" izz="1e-6" ixy="0" iyz="0" ixz="0" />
+            <inertia ixx="1e-4" iyy="1e-4" izz="1e-4" ixy="0" iyz="0" ixz="0" />
         </inertial>
         <visual name="caster_visual">
             <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
@@ -80,7 +80,7 @@
         <collision name="wheel_R_collision">
             <origin xyz="0 0 -0.017" rpy="0 0 0" />
             <geometry>
-                <sphere radius="0.035" />
+                <cylinder radius="0.035" length="0.025" />
             </geometry>
         </collision>
     </link>
@@ -101,7 +101,7 @@
         <collision name="wheel_L_collision">
             <origin xyz="0 0 -0.017" rpy="0 0 0" />
             <geometry>
-                <sphere radius="0.035" />
+                <cylinder radius="0.035" length="0.025" />
             </geometry>
         </collision>
     </link>
@@ -111,7 +111,7 @@
         <parent link="base_link" />
         <child link="wheel_L" />
         <axis xyz="0.0 0.0 -1.0" />
-        <limit effort="10.0" velocity="20.0" />
+        <limit effort="1000.0" velocity="200.0" />
         <dynamics damping="10000000.0" friction="0.1" />
     </joint>
 
@@ -120,7 +120,7 @@
         <parent link="base_link" />
         <child link="wheel_R" />
         <axis xyz="0.0 0.0 1.0" />
-        <limit effort="10.0" velocity="20.0" />
+        <limit effort="1000.0" velocity="200.0" />
         <dynamics damping="10000000.0" friction="0.1" />
     </joint>
 
@@ -135,4 +135,5 @@
         <parent link="base_link" />
         <child link="body_lid" />
     </joint>
+
 </robot>

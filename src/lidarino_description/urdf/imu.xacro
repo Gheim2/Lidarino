@@ -15,7 +15,7 @@
                      inerziale ma serve comunque un inertial valido per KDL/ros2_control -->
                 <origin xyz="0 0 0" rpy="0 0 0" />
                 <mass value="0.01" />
-                <inertia ixx="1e-6" iyy="1e-6" izz="1e-6" ixy="0.0" iyz="0.0" ixz="0.0" />
+                <inertia ixx="1e-4" iyy="1e-4" izz="1e-4" ixy="0.0" iyz="0.0" ixz="0.0" />
             </inertial>
             <visual name="imu_visual">
                 <origin xyz="0 0 0" rpy="0 0 0" />
