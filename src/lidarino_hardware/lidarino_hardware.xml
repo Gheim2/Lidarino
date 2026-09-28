@@ -3,7 +3,7 @@
            type="lidarino_hardware::LidarinoSystemHardware"
            base_class_type="hardware_interface::SystemInterface">
         <description>
-            Interfaccia Hardware custom per Lidarino (Seriale Orange Pi <-> ESP32)
+            Interfaccia Hardware custom per Lidarino (Seriale Orange Pi ESP32)
         </description>
     </class>
 </library>

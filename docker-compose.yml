@@ -1,0 +1,13 @@
+services:
+  lidarino_jazzy:
+    build: .
+    container_name: lidarino_robot
+    restart: unless-stopped
+    network_mode: "host"
+    privileged: true
+    volumes:
+      - /home/orangepi/lidarino_ws:/root/lidarino_ws
+      - /dev:/dev
+    environment:
+      - ROS_DOMAIN_ID=0
+    command: tail -f /dev/null

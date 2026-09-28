@@ -3,6 +3,7 @@
 #include <termios.h>
 #include <unistd.h>
 #include <cmath>
+#include <sys/ioctl.h>
 
 namespace lidarino_hardware
 {
@@ -19,6 +20,12 @@ hardware_interface::CallbackReturn LidarinoSystemHardware::on_init(const hardwar
     
     // Legge il nome della porta dall'URDF (es. /dev/ttyUSB0)
     port_name_ = info_.hardware_parameters["serial_port"];
+    return hardware_interface::CallbackReturn::SUCCESS;
+}
+
+hardware_interface::CallbackReturn LidarinoSystemHardware::on_configure(const rclcpp_lifecycle::State & /*previous_state*/)
+{
+    RCLCPP_INFO(rclcpp::get_logger("LidarinoHardware"), "Configurazione Lidarino hardware completata.");
     return hardware_interface::CallbackReturn::SUCCESS;
 }
 
@@ -46,6 +53,12 @@ hardware_interface::CallbackReturn LidarinoSystemHardware::on_activate(const rcl
     tty.c_iflag &= ~(IXON | IXOFF | IXANY); // No controllo flusso software
     tty.c_oflag &= ~OPOST;              // Output RAW
     tcsetattr(serial_fd_, TCSANOW, &tty);
+
+    // Forza i segnali DTR e RTS per attivare l'USB dell'ESP32
+    int flags;
+    ioctl(serial_fd_, TIOCMGET, &flags);
+    flags |= (TIOCM_DTR | TIOCM_RTS);
+    ioctl(serial_fd_, TIOCMSET, &flags);
 
     RCLCPP_INFO(rclcpp::get_logger("LidarinoHardware"), "Hardware Lidarino attivato con successo.");
     return hardware_interface::CallbackReturn::SUCCESS;
@@ -144,6 +157,7 @@ hardware_interface::return_type LidarinoSystemHardware::read(const rclcpp::Time 
 // ---------------------------------------------------------
 hardware_interface::return_type LidarinoSystemHardware::write(const rclcpp::Time & /*time*/, const rclcpp::Duration & /*period*/)
 {
+    RCLCPP_INFO(rclcpp::get_logger("LidarinoHardware"), "Comandi -> Sinistra: %.2f, Destra: %.2f", hw_cmds_[0], hw_cmds_[1]);
     CommandPacket cmd;
     cmd.sync0 = PROTO_SYNC_0;
     cmd.sync1 = PROTO_SYNC_1;

@@ -7,14 +7,13 @@ from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
 from launch_ros.parameter_descriptions import ParameterValue
 
-
 def generate_launch_description():
     # I file urdf sono dentro lidarino_description/urdf
     pkg_description = FindPackageShare('lidarino_description')
     xacro_file = PathJoinSubstitution([pkg_description, 'urdf', 'lidarino_s2.urdf.xacro'])
     controllers_file = PathJoinSubstitution([pkg_description, 'config', 'controllers_real.yaml'])
     robot_xacro_cmd = Command(['xacro ', xacro_file, ' yaml_file:=', controllers_file, ' use_sim:=false'])
-    robot_description = {'robot_description': robot_xacro_cmd}
+    robot_description = {'robot_description': ParameterValue(robot_xacro_cmd, value_type=str)}
 
     # Nodo Robot State Publisher (pubblica le TF fisse in base all'URDF)
     node_robot_state_publisher = Node(
@@ -28,7 +27,10 @@ def generate_launch_description():
     controller_manager = Node(
         package='controller_manager',
         executable='ros2_control_node',
-        parameters=[robot_description, controllers_file],
+        parameters=[controllers_file],
+	remappings=[
+		('~/robot_description', '/robot_description')
+        ],
         output='screen'
     )
 
@@ -78,6 +80,6 @@ def generate_launch_description():
         node_robot_state_publisher,
         controller_manager,
         delay_joint_state_broadcaster_spawner,
-        delay_diff_drive_controller_spawner
+        delay_diff_drive_controller_spawner,
         delay_imu_broadcaster_spawner
     ])

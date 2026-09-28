@@ -3,7 +3,7 @@
 
     <xacro:arg name="use_sim" default="true" />
 
-    <xacro:macro name="lidarino_ros2_control" params="use_lidar_control">
+    <xacro:macro name="lidarino_ros2_control" params="use_lidar_control use_sim">
         <ros2_control name="LidarinoSystem" type="system">
             <xacro:if value="${use_sim}">
                 <hardware>
@@ -23,7 +23,7 @@
             <xacro:unless value="${use_sim}">
                 <hardware>
                     <plugin>lidarino_hardware/LidarinoSystemHardware</plugin>
-                    <param name="serial_port">/dev/ttyUSB0</param>
+                    <param name="serial_port">/dev/ttyACM0</param>
                 </hardware>
             </xacro:unless>
 
