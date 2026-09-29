@@ -11,3 +11,6 @@ services:
     environment:
       - ROS_DOMAIN_ID=0
     command: tail -f /dev/null
+    devices:
+      - "/dev/ttyACM0:/dev/ttyACM0"
+

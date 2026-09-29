@@ -5,6 +5,7 @@
 #include "hardware_interface/system_interface.hpp"
 #include "hardware_interface/types/hardware_interface_type_values.hpp"
 #include "rclcpp/rclcpp.hpp"
+#include "sensor_msgs/msg/battery_state.hpp"
 
 namespace lidarino_hardware
 {
@@ -77,6 +78,9 @@ private:
 
     // Buffer per il parsing seriale in ricezione
     std::vector<uint8_t> rx_buffer_;
+    
+    rclcpp::Node::SharedPtr battery_node_;
+    rclcpp::Publisher<sensor_msgs::msg::BatteryState>::SharedPtr battery_pub_;
 };
 
 }  // namespace lidarino_hardware

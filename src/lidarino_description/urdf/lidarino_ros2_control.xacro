@@ -23,7 +23,7 @@
             <xacro:unless value="${use_sim}">
                 <hardware>
                     <plugin>lidarino_hardware/LidarinoSystemHardware</plugin>
-                    <param name="serial_port">/dev/ttyACM0</param>
+                    <param name="serial_port">/dev/lidarino</param>
                 </hardware>
             </xacro:unless>
 
