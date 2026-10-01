@@ -13,4 +13,8 @@ services:
     command: tail -f /dev/null
     devices:
       - "/dev/ttyACM0:/dev/ttyACM0"
+      - "/dev/lidarino:/dev/lidarino"
+      - "/dev/snd:/dev/snd"
+    group_add:
+      - "audio"
 

@@ -10,5 +10,8 @@ RUN apt-get update && apt-get install -y \
     ros-jazzy-xacro \
     python3-rosdep \
     && rm -rf /var/lib/apt/lists/*
-
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    espeak-ng \
+    alsa-utils \
+    && rm -rf /var/lib/apt/lists/*
 RUN echo "source /opt/ros/jazzy/setup.bash" >> ~/.bashrc
