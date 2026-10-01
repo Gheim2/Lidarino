@@ -22,7 +22,7 @@ def generate_launch_description():
         output='screen',
         parameters=[robot_description]
     )
-
+    
     # Controller manager
     controller_manager = Node(
         package='controller_manager',

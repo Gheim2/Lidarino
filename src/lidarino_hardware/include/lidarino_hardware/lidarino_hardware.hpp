@@ -6,6 +6,7 @@
 #include "hardware_interface/types/hardware_interface_type_values.hpp"
 #include "rclcpp/rclcpp.hpp"
 #include "sensor_msgs/msg/battery_state.hpp"
+#include "std_msgs/msg/float32.hpp"
 
 namespace lidarino_hardware
 {
@@ -80,7 +81,8 @@ private:
     std::vector<uint8_t> rx_buffer_;
     
     rclcpp::Node::SharedPtr battery_node_;
-    rclcpp::Publisher<sensor_msgs::msg::BatteryState>::SharedPtr battery_pub_;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr battery_voltage_pub_;
+    rclcpp::Publisher<sensor_msgs::msg::BatteryState>::SharedPtr battery_status_pub_;
 };
 
 }  // namespace lidarino_hardware

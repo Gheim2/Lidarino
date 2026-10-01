@@ -10,6 +10,8 @@ find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(hardware_interface REQUIRED)
 find_package(pluginlib REQUIRED)
+find_package(sensor_msgs REQUIRED)
+find_package(std_msgs REQUIRED)
 
 include_directories(
   include
@@ -23,6 +25,18 @@ ament_target_dependencies(lidarino_hardware
   rclcpp
   hardware_interface
   pluginlib
+  sensor_msgs
+  std_msgs
+)
+
+add_executable(lidarino_battery_publisher
+  src/lidarino_battery_publisher.cpp
+)
+
+ament_target_dependencies(lidarino_battery_publisher
+  rclcpp
+  sensor_msgs
+  std_msgs
 )
 
 pluginlib_export_plugin_description_file(hardware_interface lidarino_hardware.xml)
@@ -30,6 +44,11 @@ pluginlib_export_plugin_description_file(hardware_interface lidarino_hardware.xm
 install(
   TARGETS lidarino_hardware
   DESTINATION lib
+)
+
+install(
+  TARGETS lidarino_battery_publisher
+  DESTINATION lib/${PROJECT_NAME}
 )
 
 install(

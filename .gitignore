@@ -6,6 +6,7 @@ install/
 src/old/
 src/__pycache__/
 .env
+context.md
 
 # Compiled source #
 ###################
