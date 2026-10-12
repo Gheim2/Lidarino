@@ -52,4 +52,6 @@ Thumbs.db
 # Third-party ROS 2 packages
 src/m-explore-ros2/
 src/sllidar_ros2/
+src/ros2_astra_camera/
+src/depth_orbbec_astra/
 core.*

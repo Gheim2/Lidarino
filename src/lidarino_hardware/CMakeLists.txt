@@ -29,15 +29,15 @@ ament_target_dependencies(lidarino_hardware
   std_msgs
 )
 
-add_executable(lidarino_battery_publisher
-  src/lidarino_battery_publisher.cpp
-)
+# add_executable(lidarino_battery_publisher
+#   src/lidarino_battery_publisher.cpp
+# )
 
-ament_target_dependencies(lidarino_battery_publisher
-  rclcpp
-  sensor_msgs
-  std_msgs
-)
+# ament_target_dependencies(lidarino_battery_publisher
+#   rclcpp
+#   sensor_msgs
+#   std_msgs
+# )
 
 pluginlib_export_plugin_description_file(hardware_interface lidarino_hardware.xml)
 
@@ -46,10 +46,10 @@ install(
   DESTINATION lib
 )
 
-install(
-  TARGETS lidarino_battery_publisher
-  DESTINATION lib/${PROJECT_NAME}
-)
+# install(
+#   TARGETS lidarino_battery_publisher
+#   DESTINATION lib/${PROJECT_NAME}
+# )
 
 install(
   DIRECTORY include/

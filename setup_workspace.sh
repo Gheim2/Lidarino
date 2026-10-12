@@ -14,4 +14,4 @@ echo "Installazione delle dipendenze ROS 2..."
 rosdep update
 rosdep install --from-paths src --ignore-src -r -y --rosdistro jazzy
 
-echo "Setup completato! Ora puoi eseguire 'colcon build --symlink-install'"
+echo "Setup completato! Ora puoi eseguire 'colcon build --symlink-install --parallel-workers 2'"
