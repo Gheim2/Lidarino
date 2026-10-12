@@ -20,7 +20,7 @@ diff_drive_controller:
     right_wheel_names: ["R_wheel_Revolute"]
     use_sim_time: true
     wheel_separation: 0.128  # Distanza tra le ruote (in metri)
-    wheel_radius: 0.035     # Raggio delle ruote (in metri)
+    wheel_radius: 0.0325     # Raggio delle ruote (in metri)
     publish_rate: 50.0
     
     # Frame per l'odometria

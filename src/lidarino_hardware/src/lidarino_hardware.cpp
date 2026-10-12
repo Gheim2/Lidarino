@@ -91,12 +91,12 @@ namespace lidarino_hardware
         state_interfaces.emplace_back(hardware_interface::StateInterface(info_.joints[1].name, hardware_interface::HW_IF_POSITION, &hw_pos_[1]));
         state_interfaces.emplace_back(hardware_interface::StateInterface(info_.joints[1].name, hardware_interface::HW_IF_VELOCITY, &hw_vel_[1]));
         // IMU
-        state_interfaces.emplace_back(hardware_interface::StateInterface("imu_sensor", "accel_x", &hw_imu_accel_[0]));
-        state_interfaces.emplace_back(hardware_interface::StateInterface("imu_sensor", "accel_y", &hw_imu_accel_[1]));
-        state_interfaces.emplace_back(hardware_interface::StateInterface("imu_sensor", "accel_z", &hw_imu_accel_[2]));
-        state_interfaces.emplace_back(hardware_interface::StateInterface("imu_sensor", "gyro_x", &hw_imu_gyro_[0]));
-        state_interfaces.emplace_back(hardware_interface::StateInterface("imu_sensor", "gyro_y", &hw_imu_gyro_[1]));
-        state_interfaces.emplace_back(hardware_interface::StateInterface("imu_sensor", "gyro_z", &hw_imu_gyro_[2]));
+        state_interfaces.emplace_back(hardware_interface::StateInterface("imu_sensor", "linear_acceleration.x", &hw_imu_accel_[0]));
+        state_interfaces.emplace_back(hardware_interface::StateInterface("imu_sensor", "linear_acceleration.y", &hw_imu_accel_[1]));
+        state_interfaces.emplace_back(hardware_interface::StateInterface("imu_sensor", "linear_acceleration.z", &hw_imu_accel_[2]));
+        state_interfaces.emplace_back(hardware_interface::StateInterface("imu_sensor", "angular_velocity.x", &hw_imu_gyro_[0]));
+        state_interfaces.emplace_back(hardware_interface::StateInterface("imu_sensor", "angular_velocity.y", &hw_imu_gyro_[1]));
+        state_interfaces.emplace_back(hardware_interface::StateInterface("imu_sensor", "angular_velocity.z", &hw_imu_gyro_[2]));
         // Batteria
         state_interfaces.emplace_back(hardware_interface::StateInterface("battery_sensor", "voltage", &hw_battery_voltage_));
         return state_interfaces;
