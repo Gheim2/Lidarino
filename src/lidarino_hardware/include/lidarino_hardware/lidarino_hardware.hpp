@@ -72,7 +72,8 @@ private:
     std::vector<double> hw_cmds_ = {0.0, 0.0};
     std::vector<double> hw_pos_ = {0.0, 0.0};
     std::vector<double> hw_vel_ = {0.0, 0.0};
-
+    
+    std::vector<double> hw_imu_orientation_ = {0.0, 0.0, 0.0, 1.0}; // orientation.x, orientation.y, orientation.z, orientation.w
     std::vector<double> hw_imu_accel_ = {0.0, 0.0, 0.0}; // accel_x, accel_y, accel_z
     std::vector<double> hw_imu_gyro_ = {0.0, 0.0, 0.0};  // gyro_x, gyro_y, gyro_z
     double hw_battery_voltage_ = 0.0;

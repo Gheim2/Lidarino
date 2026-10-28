@@ -30,6 +30,7 @@ diff_drive_controller:
     wheel_separation: 0.128  # Distanza tra le ruote (in metri)
     wheel_radius: 0.0325      # Raggio delle ruote (in metri)
     publish_rate: 50.0
+    use_stamped_vel: false
     
     # Frame per l'odometria
     base_frame_id: base_link
