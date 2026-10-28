@@ -12,6 +12,7 @@ find_package(hardware_interface REQUIRED)
 find_package(pluginlib REQUIRED)
 find_package(sensor_msgs REQUIRED)
 find_package(std_msgs REQUIRED)
+find_package(realtime_tools REQUIRED)
 
 include_directories(
   include
@@ -27,6 +28,7 @@ ament_target_dependencies(lidarino_hardware
   pluginlib
   sensor_msgs
   std_msgs
+  realtime_tools
 )
 
 # add_executable(lidarino_battery_publisher
@@ -58,6 +60,7 @@ install(
 
 install(PROGRAMS
   scripts/battery_speaker.py
+  scripts/imu_covariance.py
   DESTINATION lib/${PROJECT_NAME}
 )
 

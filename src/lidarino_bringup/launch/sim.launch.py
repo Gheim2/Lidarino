@@ -176,6 +176,8 @@ def generate_launch_description():
         arguments=[
             '/imu@sensor_msgs/msg/Imu[gz.msgs.IMU'
         ],
+        # Stesso topic dell'imu_broadcaster sul robot reale
+        remappings=[('/imu', '/imu_broadcaster/imu')],
         output='screen'
     )
 

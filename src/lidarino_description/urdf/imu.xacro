@@ -3,7 +3,7 @@
 
     <!--
         IMU per sensor fusion (es. robot_localization ekf_node).
-        Topic pubblicato: /imu (sensor_msgs/msg/Imu)
+        Topic pubblicato: /imu in Gazebo, rimappato a /imu_broadcaster/imu dal bridge (come sul robot reale)
         Frame: imu_link (X=avanti, Y=sinistra, Z=su)
     -->
     <xacro:arg name="sim" default="gazebo" />

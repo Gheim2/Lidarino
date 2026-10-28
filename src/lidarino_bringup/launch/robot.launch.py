@@ -1,8 +1,9 @@
 import os
 from launch import LaunchDescription
-from launch.actions import RegisterEventHandler
+from launch.actions import DeclareLaunchArgument, RegisterEventHandler
+from launch.conditions import IfCondition
 from launch.event_handlers import OnProcessStart
-from launch.substitutions import Command, FindExecutable, PathJoinSubstitution
+from launch.substitutions import Command, FindExecutable, LaunchConfiguration, PathJoinSubstitution
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
 from launch_ros.parameter_descriptions import ParameterValue
@@ -76,10 +77,32 @@ def generate_launch_description():
         )
     )
 
+    # EKF (stessa configurazione della simulazione). Disattivato di default finché
+    # le covarianze dell'IMU non sono calibrate con imu_covariance.py
+    use_ekf_arg = DeclareLaunchArgument(
+        'use_ekf',
+        default_value='false',
+        description='Avvia robot_localization EKF (odom -> base_link)'
+    )
+
+    ekf_node = Node(
+        package='robot_localization',
+        executable='ekf_node',
+        name='ekf_filter_node',
+        output='screen',
+        condition=IfCondition(LaunchConfiguration('use_ekf')),
+        parameters=[
+            PathJoinSubstitution([pkg_description, 'config', 'ekf.yaml']),
+            {'use_sim_time': False}
+        ]
+    )
+
     return LaunchDescription([
+        use_ekf_arg,
         node_robot_state_publisher,
         controller_manager,
         delay_joint_state_broadcaster_spawner,
         delay_diff_drive_controller_spawner,
-        delay_imu_broadcaster_spawner
+        delay_imu_broadcaster_spawner,
+        ekf_node
     ])

@@ -13,7 +13,7 @@ class ImuCovarianceCalculator(Node):
         # pubblicano in modalità "Best Effort"
         self.subscription = self.create_subscription(
             Imu,
-            '/imu/data_raw',
+            '/imu_broadcaster/imu',
             self.imu_callback,
             qos_profile_sensor_data)
             

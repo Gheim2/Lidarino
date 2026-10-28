@@ -2,7 +2,8 @@
 #
 # Fonde:
 #   - /diff_drive_controller/odom  (encoder, posizione X/Y + yaw + velocità)
-#   - /imu                          (IMU, yaw/velocità angolare + accelerazione lineare)
+#   - /imu_broadcaster/imu          (IMU, yaw/velocità angolare + accelerazione lineare)
+#                                    Stesso topic in simulazione (bridge rimappato) e sul robot reale (imu_broadcaster)
 #
 # Produce:
 #   - /odometry/filtered            (nav_msgs/Odometry, smooth)
@@ -13,7 +14,7 @@
 
 ekf_filter_node:
   ros__parameters:
-    use_sim_time: true
+    use_sim_time: false           # sim.launch.py lo sovrascrive a true
 
     frequency: 30.0
     sensor_timeout: 0.1
@@ -50,7 +51,7 @@ ekf_filter_node:
     # è 2D (two_d_mode) e non serve; l'accelerazione lineare viene
     # usata solo su X per migliorare la stima di velocità nei transitori.
     # ─────────────────────────────────────────────
-    imu0: /imu
+    imu0: /imu_broadcaster/imu
     imu0_config: [false, false, false,   # x, y, z
                   false, false, false,    # roll, pitch, yaw
                   false, false, false,   # vx, vy, vz

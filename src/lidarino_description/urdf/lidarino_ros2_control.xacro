@@ -24,6 +24,9 @@
                 <hardware>
                     <plugin>lidarino_hardware/LidarinoSystemHardware</plugin>
                     <param name="serial_port">/dev/lidarino</param>
+                    <!-- Associazione per nome: l'ordine dei joint sotto non conta -->
+                    <param name="left_wheel_joint">L_wheel_Revolute</param>
+                    <param name="right_wheel_joint">R_wheel_Revolute</param>
                 </hardware>
             </xacro:unless>
 
