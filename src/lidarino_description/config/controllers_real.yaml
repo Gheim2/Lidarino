@@ -21,6 +21,14 @@ imu_broadcaster:
   ros__parameters:
     sensor_name: "imu_sensor"
     frame_id: "imu_link"
+    # Covarianze misurate il 2026-10-28 con imu_covariance.py (robot fermo, 1000 campioni a 50 Hz)
+    # Orientamento non disponibile (l'IMU non lo calcola): -1 nel primo elemento (REP 145)
+    static_covariance_orientation: [-1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+    # Giroscopio: valori misurati (limitati dalla risoluzione del protocollo, 0.001 rad/s)
+    static_covariance_angular_velocity: [3.102e-07, 0.0, 0.0, 0.0, 2.944e-07, 0.0, 0.0, 0.0, 2.734e-07]
+    # Accelerometro: misurati x100, perché in marcia vibrazioni e urti aumentano molto il rumore.
+    # Da ritarare guidando il robot (misurati da fermo: 8.888e-05, 1.116e-04, 2.900e-04)
+    static_covariance_linear_acceleration: [8.888e-03, 0.0, 0.0, 0.0, 1.116e-02, 0.0, 0.0, 0.0, 2.900e-02]
 
 diff_drive_controller:
   ros__parameters:
@@ -31,6 +39,17 @@ diff_drive_controller:
     wheel_radius: 0.0325      # Raggio delle ruote (in metri)
     publish_rate: 50.0
     use_stamped_vel: false
+
+    # Covarianze dell'odometria da encoder (AS5600, 4096 tick/giro: 1 tick ~ 0.05 mm).
+    # Valori di partenza da ritarare con i test di spinta a mano (rettilineo 2 m, 3 giri sul posto).
+    # Ordine: [vx, vy, vz, vroll, vpitch, vyaw]
+    #   vx   sigma 1 cm/s     (~3% a velocità normale: errore raggio ruota + quantizzazione)
+    #   vy   sigma 1 mm/s     (diff-drive: non si muove di lato, vincolo forte per l'EKF)
+    #   vyaw sigma 0.02 rad/s (quantizzazione + slittamento in curva: in rotazione domina il giroscopio)
+    #   vz, vroll, vpitch     enormi: senza senso per un robot 2D
+    twist_covariance_diagonal: [1.0e-4, 1.0e-6, 1000.0, 1000.0, 1000.0, 4.0e-4]
+    # Posizione: non fusa dall'EKF (fonde solo velocità), impostata per gli altri utilizzatori
+    pose_covariance_diagonal: [1.0e-3, 1.0e-3, 1000.0, 1000.0, 1000.0, 1.0e-2]
     
     # Frame per l'odometria
     base_frame_id: base_link

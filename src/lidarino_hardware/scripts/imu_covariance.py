@@ -9,8 +9,8 @@ class ImuCovarianceCalculator(Node):
     def __init__(self):
         super().__init__('imu_covariance_calculator')
         
-        # qos_profile_sensor_data perché i driver hardware 
-        # pubblicano in modalità "Best Effort"
+        # imu_broadcaster pubblica "Reliable": una sottoscrizione "Best Effort"
+        # (qos_profile_sensor_data) è compatibile e non rallenta il publisher
         self.subscription = self.create_subscription(
             Imu,
             '/imu_broadcaster/imu',
@@ -20,9 +20,11 @@ class ImuCovarianceCalculator(Node):
         self.get_logger().info("In attesa dei dati IMU...")
         self.get_logger().warn("ATTENZIONE: MANTENI IL ROBOT COMPLETAMENTE FERMO E A MOTORI SPENTI!")
         
+        # 1000 campioni distinti: l'ESP32 manda dati a 50 Hz, quindi circa 20 s
         self.target_samples = 1000
         self.current_samples = 0
-        
+        self.last_values = None
+
         # Liste per memorizzare i dati storici
         self.ax, self.ay, self.az = [], [], []
         self.gx, self.gy, self.gz = [], [], []
@@ -30,6 +32,14 @@ class ImuCovarianceCalculator(Node):
     def imu_callback(self, msg):
         if self.current_samples >= self.target_samples:
             return
+
+        # imu_broadcaster pubblica a 100 Hz ma i dati arrivano a 50 Hz: ogni campione
+        # compare due volte. I duplicati non vanno contati (falserebbero la statistica).
+        values = (msg.linear_acceleration.x, msg.linear_acceleration.y, msg.linear_acceleration.z,
+                  msg.angular_velocity.x, msg.angular_velocity.y, msg.angular_velocity.z)
+        if values == self.last_values:
+            return
+        self.last_values = values
 
         # Salvataggio dati accelerometro
         self.ax.append(msg.linear_acceleration.x)
@@ -51,31 +61,37 @@ class ImuCovarianceCalculator(Node):
             sys.exit(0)
 
     def calculate_and_print(self):
+        def calc_mean(data_list):
+            return sum(data_list) / len(data_list)
+
         # Funzione helper per calcolare la varianza (σ^2)
         def calc_variance(data_list):
-            mean = sum(data_list) / len(data_list)
+            mean = calc_mean(data_list)
             return sum((x - mean) ** 2 for x in data_list) / len(data_list)
 
-        var_ax = calc_variance(self.ax)
-        var_ay = calc_variance(self.ay)
-        var_az = calc_variance(self.az)
-        
-        var_gx = calc_variance(self.gx)
-        var_gy = calc_variance(self.gy)
-        var_gz = calc_variance(self.gz)
+        accel = (self.ax, self.ay, self.az)
+        gyro = (self.gx, self.gy, self.gz)
+        var_accel = [calc_variance(d) for d in accel]
+        var_gyro = [calc_variance(d) for d in gyro]
+
+        # Covarianze diagonali (matrice 3x3 riga per riga, come in sensor_msgs/Imu)
+        def diagonal(v):
+            return [v[0], 0.0, 0.0, 0.0, v[1], 0.0, 0.0, 0.0, v[2]]
+
+        def fmt(values):
+            return "[" + ", ".join(f"{x:.3e}" if x else "0.0" for x in values) + "]"
 
         print("\n" + "="*60)
-        print(" CALCOLO COMPLETATO: COPIA QUESTO NEL TUO NODO C++")
+        print(" CALCOLO COMPLETATO")
         print("="*60)
-        print("// Matrice covarianza Accelerazione Lineare (Diagonale)")
-        print(f"msg.linear_acceleration_covariance[0] = {var_ax:.8f}; // X")
-        print(f"msg.linear_acceleration_covariance[4] = {var_ay:.8f}; // Y")
-        print(f"msg.linear_acceleration_covariance[8] = {var_az:.8f}; // Z")
+        print("Medie (robot fermo e in piano: accel ~ 0, 0, +9.81; gyro ~ 0, 0, 0):")
+        print("  accel = " + ", ".join(f"{calc_mean(d):+.4f}" for d in accel) + " m/s^2")
+        print("  gyro  = " + ", ".join(f"{calc_mean(d):+.5f}" for d in gyro) + " rad/s")
         print("-" * 60)
-        print("// Matrice covarianza Velocità Angolare (Diagonale)")
-        print(f"msg.angular_velocity_covariance[0] = {var_gx:.8f}; // Roll")
-        print(f"msg.angular_velocity_covariance[4] = {var_gy:.8f}; // Pitch")
-        print(f"msg.angular_velocity_covariance[8] = {var_gz:.8f}; // Yaw")
+        print("Da copiare in config/controllers_real.yaml, sotto imu_broadcaster/ros__parameters:")
+        print(f"    static_covariance_orientation: [-1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]  # orientamento non disponibile (REP 145)")
+        print(f"    static_covariance_angular_velocity: {fmt(diagonal(var_gyro))}")
+        print(f"    static_covariance_linear_acceleration: {fmt(diagonal(var_accel))}")
         print("="*60 + "\n")
 
 def main(args=None):

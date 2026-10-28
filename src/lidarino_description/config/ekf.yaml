@@ -1,8 +1,8 @@
 ### ekf.yaml — robot_localization (EKF locale)
 #
-# Fonde:
-#   - /diff_drive_controller/odom  (encoder, posizione X/Y + yaw + velocità)
-#   - /imu_broadcaster/imu          (IMU, yaw/velocità angolare + accelerazione lineare)
+# Fonde solo velocità (le posizioni di due sorgenti si conterebbero due volte):
+#   - /diff_drive_controller/odom  (encoder: vx, vy = 0, vyaw)
+#   - /imu_broadcaster/imu          (giroscopio: vyaw)
 #                                    Stesso topic in simulazione (bridge rimappato) e sul robot reale (imu_broadcaster)
 #
 # Produce:
@@ -16,7 +16,7 @@ ekf_filter_node:
   ros__parameters:
     use_sim_time: false           # sim.launch.py lo sovrascrive a true
 
-    frequency: 30.0
+    frequency: 50.0               # come odometria (50 Hz) e dati IMU (50 Hz)
     sensor_timeout: 0.1
     two_d_mode: true              # il robot è un diff-drive su pavimento piano
     transform_time_offset: 0.0
@@ -32,11 +32,13 @@ ekf_filter_node:
 
     # ─────────────────────────────────────────────
     # Sorgente 1: odometria da encoder (diff_drive_controller)
+    # vy è sempre 0 per un diff-drive (non può muoversi di lato): fonderlo
+    # impone il vincolo anolonomo, altrimenti la stima di vy deriva liberamente.
     # ─────────────────────────────────────────────
     odom0: /diff_drive_controller/odom
     odom0_config: [false,  false,  false,   # x, y, z
                     false, false, false,    # roll, pitch, yaw
-                    true,  false,  false,   # vx, vy, vz
+                    true,  true,  false,    # vx, vy, vz
                     false, false, true,    # vroll, vpitch, vyaw
                     false, false, false]   # ax, ay, az
     odom0_queue_size: 10
@@ -46,22 +48,25 @@ ekf_filter_node:
 
     # ─────────────────────────────────────────────
     # Sorgente 2: IMU
-    # Usiamo SOLO yaw e velocità angolare/lineare dall'IMU.
-    # Non fondiamo l'orientamento roll/pitch assoluto perché il robot
-    # è 2D (two_d_mode) e non serve; l'accelerazione lineare viene
-    # usata solo su X per migliorare la stima di velocità nei transitori.
+    # Usiamo SOLO la velocità angolare di imbardata (vyaw) dal giroscopio:
+    # precisa (rumore ~0.0005 rad/s) e indipendente dallo slittamento delle ruote.
+    # L'orientamento non è disponibile (l'IMU non lo calcola, covarianza -1).
+    # ax NON viene fuso: il robot oscilla in beccheggio quando accelera e ogni
+    # grado di inclinazione aggiunge ~0.17 m/s^2 di gravità su ax; la velocità
+    # viene già misurata direttamente dagli encoder. Da rivalutare con la SLAM.
     # ─────────────────────────────────────────────
     imu0: /imu_broadcaster/imu
     imu0_config: [false, false, false,   # x, y, z
                   false, false, false,    # roll, pitch, yaw
                   false, false, false,   # vx, vy, vz
                   false, false, true,    # vroll, vpitch, vyaw
-                  true,  false, false]   # ax, ay, az
+                  false, false, false]   # ax, ay, az
     imu0_queue_size: 10
     imu0_nodelay: true
     imu0_differential: false
     imu0_relative: false
-    imu0_remove_gravitational_acceleration: true
+    # Serve solo se si fonde l'accelerazione, e richiede un orientamento che l'IMU non fornisce
+    imu0_remove_gravitational_acceleration: false
 
     # ─────────────────────────────────────────────
     # Modello di processo: quanto il filtro "si fida" della predizione
