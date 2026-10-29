@@ -1,0 +1,11 @@
+# RPLIDAR S2 (sllidar_ros2), avviato da robot.launch.py con use_lidar:=true
+sllidar_node:
+  ros__parameters:
+    channel_type: serial
+    serial_port: /dev/ttyUSB0
+    serial_baudrate: 1000000
+    # Deve coincidere con il link del laser nell'URDF (rplidars2.xacro)
+    frame_id: rplidars2_laser_link
+    inverted: false
+    angle_compensate: true
+    scan_mode: DenseBoost

@@ -54,4 +54,5 @@ diff_drive_controller:
     # Frame per l'odometria
     base_frame_id: base_link
     odom_frame_id: odom
-    enable_odom_tf: false
+    # enable_odom_tf non va messo qui: di default (true) il controller pubblica la TF odom -> base_link.
+    # Con use_ekf:=true robot.launch.py carica diff_drive_no_odom_tf.yaml, perché la TF la pubblica l'EKF.

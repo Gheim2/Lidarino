@@ -81,6 +81,7 @@ namespace lidarino_hardware
         tcflush(serial_fd_, TCIFLUSH);      // Scarta eventuali byte vecchi (es. log di boot dell'ESP32)
         rx_buffer_.clear();
         resync_position_ = true;            // dopo un reset dell'ESP32 i contatori encoder ripartono da 0
+        last_valid_telemetry_ = std::chrono::steady_clock::now();
         return "";
     }
     void LidarinoSystemHardware::close_serial()
@@ -188,6 +189,7 @@ namespace lidarino_hardware
                 uint8_t calculated_cs = compute_checksum(rx_buffer_.data(), TELEMETRY_SIZE - 2);
                 if (calculated_cs == rx_buffer_[TELEMETRY_SIZE - 2]) {
                     // Pacchetto valido!
+                    last_valid_telemetry_ = std::chrono::steady_clock::now();
                     TelemetryPacket* tp = reinterpret_cast<TelemetryPacket*>(rx_buffer_.data());
                     if (!(tp->status_flags & STATUS_BIT_IMU_OK)) {
                         RCLCPP_WARN_THROTTLE(
@@ -246,13 +248,21 @@ namespace lidarino_hardware
                     calculated_cs, rx_buffer_[TELEMETRY_SIZE - 2]);
             }
             // Se non è sincrono, droppa un byte per riallinearsi.
-            // I byte scartati che formano testo (es. "[BOOT] reset_reason=..." del firmware) vengono riportati nel log.
+            // I byte scartati che formano testo vengono riportati nel log: il report "[BOOT] ..." del firmware
+            // e le righe di Serial.println() (es. "Error initializing right encoder!" se l'ESP32 è bloccato nel setup)
             const char c = static_cast<char>(rx_buffer_.front());
             if (c == '\n') {
                 if (esp_text_line_.rfind("[BOOT]", 0) == 0) {
                     RCLCPP_WARN(rclcpp::get_logger("LidarinoHardware"), "ESP32: %s", esp_text_line_.c_str());
+                } else if (esp_text_line_.size() >= 8) {
+                    // Soglia di lunghezza: evita di stampare frammenti casuali di pacchetti binari
+                    RCLCPP_WARN_THROTTLE(
+                        rclcpp::get_logger("LidarinoHardware"), *battery_node_->get_clock(), 1000,
+                        "ESP32: %s", esp_text_line_.c_str());
                 }
                 esp_text_line_.clear();
+            } else if (c == '\r') {
+                // println() termina con "\r\n": il '\r' non deve cancellare la riga
             } else if (c >= 0x20 && c <= 0x7E && esp_text_line_.size() < 120) {
                 esp_text_line_.push_back(c);
             } else {
@@ -273,6 +283,7 @@ namespace lidarino_hardware
             rclcpp::get_logger("LidarinoHardware"), *battery_node_->get_clock(), 1000,
             "Comandi -> Sinistra: %.2f, Destra: %.2f", hw_cmds_[0], hw_cmds_[1]);
         send_command();
+        report_link_health();
         // Mai ERROR: ros2_control disattiverebbe hardware e controller per un singolo errore
         // transitorio, senza più recuperare. Gli errori gravi chiudono la porta e read() riconnette.
         return hardware_interface::return_type::OK;
@@ -293,6 +304,7 @@ namespace lidarino_hardware
         cmd.checksum = compute_checksum(
             reinterpret_cast<uint8_t*>(&cmd), sizeof(CommandPacket) - 2);
         cmd.terminator = 0x0D;
+        cmd_attempts_++;
         const ssize_t bytes_written = ::write(serial_fd_, &cmd, sizeof(CommandPacket));
         if (bytes_written == static_cast<ssize_t>(sizeof(CommandPacket))) return;
         if (bytes_written >= 0) {
@@ -301,14 +313,34 @@ namespace lidarino_hardware
                 rclcpp::get_logger("LidarinoHardware"), *battery_node_->get_clock(), 2000,
                 "Serial write parziale: %zd/%zu byte", bytes_written, sizeof(CommandPacket));
         } else if (errno == EAGAIN || errno == EWOULDBLOCK) {
-            // Buffer di uscita pieno: l'ESP32 non sta leggendo (bloccato o in reset). Si salta il ciclo.
-            RCLCPP_WARN_THROTTLE(
-                rclcpp::get_logger("LidarinoHardware"), *battery_node_->get_clock(), 2000,
-                "Serial write: buffer pieno, l'ESP32 non legge i comandi (comando saltato)");
+            // Buffer di uscita pieno: l'ESP32 non sta leggendo (bloccato o in reset). Si salta il ciclo,
+            // il conteggio viene riportato da report_link_health()
+            cmd_skipped_++;
         } else {
             RCLCPP_ERROR(rclcpp::get_logger("LidarinoHardware"), "Serial write fallita (%s), riconnessione in corso",
                 std::strerror(errno));
             close_serial();
+        }
+    }
+    // Ogni 2 s: quanti comandi sono stati saltati (sempre = ESP32 fermo, a volte = loop lento)
+    // e da quanto manca la telemetria (ESP32 bloccato nel setup, in reset o porta sbagliata)
+    void LidarinoSystemHardware::report_link_health()
+    {
+        const auto now = std::chrono::steady_clock::now();
+        if (now - last_health_report_ < std::chrono::seconds(2)) return;
+        last_health_report_ = now;
+        if (cmd_skipped_ > 0) {
+            RCLCPP_WARN(rclcpp::get_logger("LidarinoHardware"),
+                "Serial write: %u/%u comandi saltati negli ultimi 2 s (buffer pieno, l'ESP32 non legge i comandi)",
+                cmd_skipped_, cmd_attempts_);
+        }
+        cmd_attempts_ = 0;
+        cmd_skipped_ = 0;
+        const double silence = std::chrono::duration<double>(now - last_valid_telemetry_).count();
+        if (silence > 2.0) {
+            RCLCPP_WARN(rclcpp::get_logger("LidarinoHardware"),
+                "Nessuna telemetria valida dall'ESP32 da %.1f s su %s: firmware fermo nel setup o porta sbagliata?",
+                silence, port_name_.c_str());
         }
     }
 }  // namespace lidarino_hardware

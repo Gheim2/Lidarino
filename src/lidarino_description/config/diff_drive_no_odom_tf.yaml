@@ -1,0 +1,5 @@
+# Caricato da robot.launch.py solo con use_ekf:=true (spawner --param-file).
+# La TF odom -> base_link la pubblica l'EKF: due sorgenti per la stessa TF la farebbero saltare.
+diff_drive_controller:
+  ros__parameters:
+    enable_odom_tf: false

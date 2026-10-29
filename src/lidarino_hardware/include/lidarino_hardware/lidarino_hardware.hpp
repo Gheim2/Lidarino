@@ -76,8 +76,13 @@ private:
     void close_serial();
     void try_reconnect();
     void send_command();         // invia hw_cmds_ all'ESP32
+    void report_link_health();   // avvisa se la telemetria manca o i comandi non partono
 
     std::chrono::steady_clock::time_point last_reconnect_attempt_{};
+    std::chrono::steady_clock::time_point last_valid_telemetry_{}; // ultimo pacchetto valido (o apertura porta)
+    std::chrono::steady_clock::time_point last_health_report_{};
+    unsigned int cmd_attempts_ = 0;  // comandi tentati dall'ultimo report
+    unsigned int cmd_skipped_ = 0;   // di cui saltati per buffer pieno (EAGAIN)
     bool resync_position_ = true;                // al primo pacchetto dopo (ri)connessione
     std::vector<double> pos_offset_ = {0.0, 0.0}; // continuità della posizione dopo un reset dell'ESP32
     std::string esp_text_line_;                   // testo ricevuto fuori dai pacchetti (report di boot)
